@@ -1,6 +1,7 @@
 {
   "name": "skillbridge-backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "backend for skillbridge - an internship repository platform for university students",
   "main": "index.js",
   "scripts": {
