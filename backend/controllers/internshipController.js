@@ -14,7 +14,7 @@ export const getInternships = asyncHandler(async (req, res) => {
 // @route GET /api/products/:id
 // @access Public
 
-export const getProductById = asyncHandler(async (req, res) => {
+export const getInternshipById = asyncHandler(async (req, res) => {
   const internship = await Internship.findById(req.params.id);
   if (internship) {
     return res.json(internship);
