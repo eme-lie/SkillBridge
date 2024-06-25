@@ -1,4 +1,4 @@
-const products = [
+const internships = [
   {
     title: "Junior Developer Support Remote 2024",
     logo: "./images/hp-logo.jpg",
@@ -94,4 +94,4 @@ const products = [
   },
 ];
 
-export default products;
+export default internships;

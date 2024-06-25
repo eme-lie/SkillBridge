@@ -10,9 +10,9 @@ const employabilityEssentialSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const employabilityEssential = mongoose.model(
-  "employabilityEssential",
+const EmployabilityEssential = mongoose.model(
+  "EmployabilityEssential",
   employabilityEssentialSchema
 );
 
-export default employabilityEssential;
+export default EmployabilityEssential;
