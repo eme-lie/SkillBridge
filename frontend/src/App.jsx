@@ -1,9 +1,10 @@
-function App() {
+import { Outlet } from "react-router-dom";
+
+export const App = () => {
   return (
     <>
-      <h1 className="text-3xl">App</h1>
+      <Outlet />
+      {/* The Outlet component is a placeholder for the child route components of the current route(App) */}
     </>
   );
-}
-
-export default App;
+};
