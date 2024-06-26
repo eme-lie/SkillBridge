@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
   res.send("Server is ready");
 });
 
-app.use("/internships", internshipRoutes);
+app.use("/api/internships", internshipRoutes);
 
 app.listen(port, () => {
   console.log(`listening at ${port}`);
