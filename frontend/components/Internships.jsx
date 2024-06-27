@@ -17,7 +17,10 @@ const Internships = () => {
       <h1>Internships</h1>
       <ul>
         {internships.map((internship) => (
-          <li key={internship._id}>{internship.title}</li>
+          <li key={internship._id}>
+            <p>{internship.title}</p>
+            <p>{internship._id}</p>
+          </li>
         ))}
       </ul>
     </div>

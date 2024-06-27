@@ -8,7 +8,7 @@ const Internship = () => {
   const [internship, setInternship] = useState({});
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(`/internships/${id}`);
+      const { data } = await axios.get(`/api/internships/${id}`);
       setInternship(data);
       console.log(data);
     };
@@ -17,7 +17,7 @@ const Internship = () => {
 
   return (
     <>
-      I<h1>{internship.name}</h1>
+      <h1>{internship.title}</h1>
       <p>{internship.description}</p>
     </>
   );
