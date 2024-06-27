@@ -6,7 +6,8 @@ const Internships = () => {
   const [internships, setInternships] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get("/internships");
+      const { data } = await axios.get("/api/internships");
+      console.log(data);
       setInternships(data);
     };
     fetchData();
@@ -16,7 +17,10 @@ const Internships = () => {
       <h1>Internships</h1>
       <ul>
         {internships.map((internship) => (
-          <li key={internship._id}>{internship.name}</li>
+          <li key={internship._id}>
+            <p>{internship.title}</p>
+            <p>{internship._id}</p>
+          </li>
         ))}
       </ul>
     </div>
