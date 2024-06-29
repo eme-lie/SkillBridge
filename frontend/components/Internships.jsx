@@ -18,8 +18,8 @@ const Internships = () => {
       <ul>
         {internships.map((internship) => (
           <li key={internship._id}>
-            <p>{internship.title}</p>
-            <p>{internship._id}</p>
+            <p className="font-bold text-3xl">{internship.title}</p>
+            <p className="text-3xl">{internship._id}</p>
           </li>
         ))}
       </ul>
