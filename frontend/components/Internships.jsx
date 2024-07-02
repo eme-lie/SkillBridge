@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 //import dotenv from "dotenv";
 //dotenv.config();
 
@@ -122,9 +130,20 @@ const Internships = () => {
   return (
     <div>
       <h1>Internships</h1>
+      <Button className="bg-primary_light">Click me</Button>
+      <Button className="bg-primary_light">Click Again</Button>
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Is it accessible?</AccordionTrigger>
+          <AccordionContent>
+            Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
       <div>
         <input
+          className=""
           type="text"
           placeholder="Search..."
           value={search}
