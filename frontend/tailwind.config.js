@@ -77,6 +77,10 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      boxShadow: {
+        custom1:
+          "rgba(0, 0, 0, 0.02) 0px 20px 43.008px 0px, rgba(0, 0, 0, 0.01) 0px 4px 16px 0px, rgba(0, 0, 0, 0.024) 0px 2px 6px 0px, rgba(0, 0, 0, 0.01) 0px 0px 2px 0px",
+      },
     },
   },
   plugins: [],
