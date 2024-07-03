@@ -17,6 +17,22 @@ export default {
       fontFamily: {
         sans: ["Roboto", "sans-serif"],
       },
+
+      fontSize: {
+        h1: ["36px", { lineHeight: "43.2px", fontWeight: "700" }],
+        h2: ["21px", { lineHeight: "25px", fontWeight: "400" }],
+        t1: ["16px", { lineHeight: "24px", fontWeight: "700" }],
+        t2: ["16px", { lineHeight: "24px", fontWeight: "600" }],
+        t3: ["14px", { lineHeight: "17px", fontWeight: "700" }],
+        t4: ["14px", { lineHeight: "17px", fontWeight: "400" }],
+        b1: ["16px", { lineHeight: "24px", fontWeight: "400" }],
+        b2: ["16px", { lineHeight: "24px", fontWeight: "400" }],
+        b3: ["14px", { lineHeight: "17px", fontWeight: "700" }],
+        b4: ["14px", { lineHeight: "17px", fontWeight: "500" }],
+        b5: ["14px", { lineHeight: "17px", fontWeight: "400" }],
+        sb1: ["12px", { lineHeight: "16px", fontWeight: "400" }],
+        sb2: ["12px", { lineHeight: "16px", fontWeight: "600" }],
+      },
       colors: {
         // Light Mode Colors
         primary_light: "#57A2FF",
