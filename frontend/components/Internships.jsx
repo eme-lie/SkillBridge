@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { SlidersHorizontal, MapPin, Calendar } from "lucide-react";
+
+import {
+  SlidersHorizontal,
+  MapPin,
+  Calendar,
+  Bookmark,
+  /*BookmarkCheck,*/
+} from "lucide-react";
 
 import {
   Sheet,
@@ -13,7 +19,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-import { faBookmark as faBookmarkRegular } from "@fortawesome/free-regular-svg-icons";
 import {
   Accordion,
   AccordionContent,
@@ -370,37 +375,31 @@ const Internships = () => {
         <div className="internships flex flex-col gap-y-4">
           {internships.map((internship) => (
             <div
-              className="flex flex-col border border-border_light pt-4 pr-8 pb-4 pl-8 rounded-lg hover:bg-hover_light cursor-pointer justify-between "
+              className="flex flex-col border border-border_light pt-4 pr-8 pb-4 pl-8 rounded-lg hover:bg-hover_light cursor-pointer justify-between"
               key={internship._id}
             >
               <div className="flex internship-top justify-between items-center">
                 <h3 className="text-t1 hover:text-primary_light cursor-pointer ">
                   {internship.title}
                 </h3>
-                {/* <FontAwesomeIcon
-                  icon={faBookmark}
-                  style={{ color: "#191a23" }}
-                /> */}
+                {/* <BookmarkCheck className="primary_light w-8 />  */}
 
-                <FontAwesomeIcon
-                  icon={faBookmarkRegular}
-                  style={{ color: "#191a23" }}
-                />
+                <Bookmark className="icon_light w-8" />
               </div>
               <div className="internship-bottom flex gap-x-4">
                 <img className="w-20 h-20" src={internship.logo} alt="" />
-                <div className="internship-left-bottom-right flex flex-col gap-y-2 justify-center">
+                <div className="internship-left-bottom-right flex flex-col gap-y-1 justify-center">
                   <p className="text-b4 text-primary_light">
                     {internship.employer}
                   </p>
-                  <div className="flex gap-x-2 items-center">
+                  <div className="flex gap-x-1 items-center">
                     <MapPin className="icon_light w-4" />
 
                     <p className="text-b4 text-text_light">
                       {internship.location}
                     </p>
                   </div>
-                  <div className="flex gap-x-2 items-center">
+                  <div className="flex gap-x-1 items-center">
                     <Calendar className="icon_light w-4" />
 
                     <p className="text-b4 text-text_light">
