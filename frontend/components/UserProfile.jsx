@@ -1,5 +1,12 @@
+import Navbar from "./Navbar";
+
 const UserProfile = () => {
-  return <div>UserProfile</div>;
+  return (
+    <div>
+      <Navbar />
+      UserProfile
+    </div>
+  );
 };
 
 export default UserProfile;

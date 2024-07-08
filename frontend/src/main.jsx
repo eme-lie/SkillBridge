@@ -5,24 +5,24 @@ import "./index.css";
 import Internships from "../components/Internships.jsx";
 import Internship from "../components/Internship.jsx";
 
-import Resources from "components/Resources";
-import SavedResources from "components/SavedResources";
-import SavedInternships from "components/SavedInternships";
-import UserProfile from "components/UserProfile";
+import Resources from "../components/Resources";
+import SavedResources from "../components/SavedResources";
+import SavedInternships from "../components/SavedInternships";
+import UserProfile from "../components/UserProfile";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
-  { path: "/", element: <Internships /> },
+  { path: "/internships", element: <Internships /> },
   {
     path: "/internships/:id",
     element: <Internship />,
   },
 
   { path: "/resources", element: <Resources /> },
-  { path: "/saved-resources", element: <SavedResources /> },
-  { path: "/saved-internships", element: <SavedInternships /> },
-  { path: "/user-profile", element: <UserProfile /> },
+  { path: "/saved_resources", element: <SavedResources /> },
+  { path: "/saved_internships", element: <SavedInternships /> },
+  { path: "/user_profile", element: <UserProfile /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

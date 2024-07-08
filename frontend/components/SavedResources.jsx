@@ -1,5 +1,12 @@
+import Navbar from "./Navbar";
+
 const SavedResources = () => {
-  return <div>SavedResources</div>;
+  return (
+    <div>
+      <Navbar />
+      SavedResources
+    </div>
+  );
 };
 
 export default SavedResources;
