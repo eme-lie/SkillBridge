@@ -1,12 +1,31 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+import {
+  SlidersHorizontal,
+  MapPin,
+  Calendar,
+  Bookmark,
+  /*BookmarkCheck,*/
+} from "lucide-react";
+
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
 //import dotenv from "dotenv";
 //dotenv.config();
 
@@ -127,114 +146,286 @@ const Internships = () => {
   };
 
   return (
-    <div>
-      <h1>Internships</h1>
-      <Button className="bg-primary_light">Click me</Button>
-      <Button className="bg-primary_light">Click Again</Button>
-      <Accordion type="single" collapsible>
-        <AccordionItem value="item-1">
-          <AccordionTrigger>Is it accessible?</AccordionTrigger>
-          <AccordionContent>
-            Yes. It adheres to the WAI-ARIA design pattern.
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-
-      <div>
-        <input
+    <div className="main-container flex flex-row lg:pt-4 lg:pr-16 lg:pl-16 gap-x-16 ">
+      <div className=" menubar flex flex-col w-45 gap-y-4 ">
+        <Input
           className=""
           type="text"
           placeholder="Search..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-
-        <div>
-          <h3>Locations</h3>
-          {locations.map((loc) => (
-            <span
-              key={loc._id}
-              onClick={() => handleFilterToggle("location", loc.name)}
-              style={{
-                cursor: "pointer",
-                textDecoration: location === loc.name ? "underline" : "none",
-                margin: "0 10px",
-              }}
-            >
-              {loc.name}
-            </span>
-          ))}
+        <div className="filters flex flex-col gap-y-2">
+          <Accordion className="location" type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>
+                <p className="text-b3">Locations</p>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-col h-24 overflow-y-auto scrollbar-hide gap-y-1">
+                  {locations.map((loc) => (
+                    <span
+                      className={`cursor-pointer ${
+                        location === loc.name
+                          ? "text-primary_light"
+                          : "text-text_light"
+                      } mx-2.5`}
+                      key={loc._id}
+                      onClick={() => handleFilterToggle("location", loc.name)}
+                    >
+                      {loc.name}
+                    </span>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          <Accordion className="Sector" type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>
+                <p className="text-b3">Sectors</p>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-col h-24 overflow-y-auto scrollbar-hide gap-y-1">
+                  {sectors.map((sec) => (
+                    <span
+                      className={`cursor-pointer ${
+                        sector === sec.name
+                          ? "text-primary_light"
+                          : "text-text_light"
+                      } mx-2.5`}
+                      key={sec._id}
+                      onClick={() => handleFilterToggle("sector", sec.name)}
+                    >
+                      {sec.name}
+                    </span>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          <Accordion className="Sector" type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>
+                <p className="text-b3">Employers</p>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-col h-24 overflow-y-auto scrollbar-hide gap-y-1">
+                  {employers.map((emp) => (
+                    <span
+                      className={`cursor-pointer ${
+                        employer === emp.name
+                          ? "text-primary_light"
+                          : "text-text_light"
+                      } mx-2.5`}
+                      key={emp._id}
+                      onClick={() => handleFilterToggle("employer", emp.name)}
+                    >
+                      {emp.name}
+                    </span>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
-
-        <div>
-          <h3>Sectors</h3>
-          {sectors.map((sec) => (
-            <span
-              key={sec._id}
-              onClick={() => handleFilterToggle("sector", sec.name)}
-              style={{
-                cursor: "pointer",
-                textDecoration: sector === sec.name ? "underline" : "none",
-                margin: "0 10px",
-              }}
-            >
-              {sec.name}
-            </span>
-          ))}
-        </div>
-
-        <div>
-          <h3>Employers</h3>
-          {employers.map((emp) => (
-            <span
-              key={emp._id}
-              onClick={() => handleFilterToggle("employer", emp.name)}
-              style={{
-                cursor: "pointer",
-                textDecoration: employer === emp.name ? "underline" : "none",
-                margin: "0 10px",
-              }}
-            >
-              {emp.name}
-            </span>
-          ))}
-        </div>
-
-        <select value={sort} onChange={(e) => setSort(e.target.value)}>
-          <option value="createdAt,desc">Newest First</option>
-          <option value="createdAt,asc">Oldest First</option>
-          <option value="title,asc">Title A-Z</option>
-          <option value="title,desc">Title Z-A</option>
-        </select>
       </div>
+      <div className="right-side flex flex-col gap-y-4 w-55">
+        <div className="right-side-top flex justify-between">
+          <div className="sort flex gap-x-2 items-center">
+            <p className="text-b5 text-text_light">Sort by:</p>
 
-      <button onClick={handleClearFilters}>Clear Filters</button>
-
-      <div>
-        {internships.map((internship) => (
-          <div key={internship._id}>
-            <h2>{internship.title}</h2>
-            <p>{internship.location}</p>
-            <p>{internship.sector}</p>
-            <p>{internship.employer}</p>
+            <select
+              className="border border-border_light py-2 pr-3 rounded-lg h-10 text-b5 text-text_light"
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+            >
+              <option
+                className="text-b5 text-text_light"
+                value="createdAt,desc"
+              >
+                Newest First
+              </option>
+              <option className="text-b5 text-text_light" value="createdAt,asc">
+                Oldest First
+              </option>
+              <option className="text-b5 text-text_light" value="title,asc">
+                Title A-Z
+              </option>
+              <option className="text-b5 text-text_light" value="title,desc">
+                Title Z-A
+              </option>
+            </select>
           </div>
-        ))}
-      </div>
+          <div className="clear-show-filters flex gap-x-2 items-center">
+            <p
+              className="text-destructive_light cursor-pointer text-b5"
+              onClick={handleClearFilters}
+            >
+              Clear Filters
+            </p>
+            <Sheet className="bg-background_light flex flex-col h-full">
+              <SheetTrigger>
+                <div className="filters-toggle-mobile-view flex gap-x-1 border rounded-lg items-center py-2 px-2 border-primary_light border-opacity-50">
+                  <SlidersHorizontal className="w-4 h-4" />
+                  <p className="filters-toggle-mobile-view-text cursor-pointer text-b3">
+                    Filters
+                  </p>
+                </div>
+              </SheetTrigger>
+              <SheetContent className="bg-background_light flex flex-col h-full">
+                <SheetHeader className="flex flex-col h-full">
+                  <SheetTitle className="text-b3">Filters</SheetTitle>
+                  <SheetDescription className="flex flex-col justify-between h-full">
+                    <div className="filters flex flex-col gap-y-2">
+                      <Accordion className="location" type="single" collapsible>
+                        <AccordionItem value="item-1">
+                          <AccordionTrigger>
+                            <p className="text-b3">Locations</p>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="flex flex-col h-24 overflow-y-auto scrollbar-hide gap-y-1">
+                              {locations.map((loc) => (
+                                <span
+                                  className={`cursor-pointer ${
+                                    location === loc.name
+                                      ? "text-primary_light"
+                                      : "text-text_light"
+                                  } mx-2.5`}
+                                  key={loc._id}
+                                  onClick={() =>
+                                    handleFilterToggle("location", loc.name)
+                                  }
+                                >
+                                  {loc.name}
+                                </span>
+                              ))}
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                      <Accordion className="Sector" type="single" collapsible>
+                        <AccordionItem value="item-1">
+                          <AccordionTrigger>
+                            <p className="text-b3">Sectors</p>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="flex flex-col h-24 overflow-y-auto scrollbar-hide gap-y-1">
+                              {sectors.map((sec) => (
+                                <span
+                                  className={`cursor-pointer ${
+                                    sector === sec.name
+                                      ? "text-primary_light"
+                                      : "text-text_light"
+                                  } mx-2.5`}
+                                  key={sec._id}
+                                  onClick={() =>
+                                    handleFilterToggle("sector", sec.name)
+                                  }
+                                >
+                                  {sec.name}
+                                </span>
+                              ))}
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                      <Accordion className="Sector" type="single" collapsible>
+                        <AccordionItem value="item-1">
+                          <AccordionTrigger>
+                            <p className="text-b3">Employers</p>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="flex flex-col h-24 overflow-y-auto scrollbar-hide gap-y-1">
+                              {employers.map((emp) => (
+                                <span
+                                  className={`cursor-pointer ${
+                                    employer === emp.name
+                                      ? "text-primary_light"
+                                      : "text-text_light"
+                                  } mx-2.5`}
+                                  key={emp._id}
+                                  onClick={() =>
+                                    handleFilterToggle("employer", emp.name)
+                                  }
+                                >
+                                  {emp.name}
+                                </span>
+                              ))}
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    </div>
+                    <div className="filter-mobile-view-footer flex shadow-custom2 h-8 items-center px-2 justify-end mt-16">
+                      <p
+                        className="text-destructive_light cursor-pointer text-b5"
+                        onClick={handleClearFilters}
+                      >
+                        Clear Filters
+                      </p>
+                    </div>
+                  </SheetDescription>
+                </SheetHeader>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
 
-      <div>
-        <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-        >
-          Previous
-        </button>
-        <span>{page}</span>
-        <button
-          onClick={() => setPage((prev) => prev + 1)}
-          disabled={page * limit >= total}
-        >
-          Next
-        </button>
+        <div className="internships flex flex-col gap-y-4">
+          {internships.map((internship) => (
+            <div
+              className="flex flex-col border border-border_light pt-4 pr-8 pb-4 pl-8 rounded-lg hover:bg-hover_light cursor-pointer justify-between"
+              key={internship._id}
+            >
+              <div className="flex internship-top justify-between items-center">
+                <h3 className="text-t1 hover:text-primary_light cursor-pointer ">
+                  {internship.title}
+                </h3>
+                {/* <BookmarkCheck className="primary_light w-8 />  */}
+
+                <Bookmark className="icon_light w-8" />
+              </div>
+              <div className="internship-bottom flex gap-x-4">
+                <img className="w-20 h-20" src={internship.logo} alt="" />
+                <div className="internship-left-bottom-right flex flex-col gap-y-1 justify-center">
+                  <p className="text-b4 text-primary_light">
+                    {internship.employer}
+                  </p>
+                  <div className="flex gap-x-1 items-center">
+                    <MapPin className="icon_light w-4" />
+
+                    <p className="text-b4 text-text_light">
+                      {internship.location}
+                    </p>
+                  </div>
+                  <div className="flex gap-x-1 items-center">
+                    <Calendar className="icon_light w-4" />
+
+                    <p className="text-b4 text-text_light">
+                      {new Date(internship.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div>
+          <button
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            disabled={page === 1}
+          >
+            Previous
+          </button>
+          <span>{page}</span>
+          <button
+            onClick={() => setPage((prev) => prev + 1)}
+            disabled={page * limit >= total}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

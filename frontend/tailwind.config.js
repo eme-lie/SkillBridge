@@ -20,18 +20,18 @@ export default {
 
       fontSize: {
         h1: ["36px", { lineHeight: "43.2px", fontWeight: "700" }],
-        h2: ["21px", { lineHeight: "25px", fontWeight: "400" }],
+        h2: ["21px", { lineHeight: "25px", fontWeight: "300" }],
         t1: ["16px", { lineHeight: "24px", fontWeight: "700" }],
-        t2: ["16px", { lineHeight: "24px", fontWeight: "600" }],
+        t2: ["16px", { lineHeight: "24px", fontWeight: "500" }],
         t3: ["14px", { lineHeight: "17px", fontWeight: "700" }],
-        t4: ["14px", { lineHeight: "17px", fontWeight: "400" }],
-        b1: ["16px", { lineHeight: "24px", fontWeight: "400" }],
-        b2: ["16px", { lineHeight: "24px", fontWeight: "400" }],
+        t4: ["14px", { lineHeight: "17px", fontWeight: "300" }],
+        b1: ["16px", { lineHeight: "24px", fontWeight: "300" }],
+        b2: ["16px", { lineHeight: "24px", fontWeight: "300" }],
         b3: ["14px", { lineHeight: "17px", fontWeight: "700" }],
-        b4: ["14px", { lineHeight: "17px", fontWeight: "500" }],
-        b5: ["14px", { lineHeight: "17px", fontWeight: "400" }],
-        sb1: ["12px", { lineHeight: "16px", fontWeight: "400" }],
-        sb2: ["12px", { lineHeight: "16px", fontWeight: "600" }],
+        b4: ["14px", { lineHeight: "17px", fontWeight: "400" }],
+        b5: ["14px", { lineHeight: "17px", fontWeight: "300" }],
+        sb1: ["12px", { lineHeight: "16px", fontWeight: "300" }],
+        sb2: ["12px", { lineHeight: "16px", fontWeight: "500" }],
       },
       colors: {
         // Light Mode Colors
@@ -80,6 +80,8 @@ export default {
       boxShadow: {
         custom1:
           "rgba(0, 0, 0, 0.02) 0px 20px 43.008px 0px, rgba(0, 0, 0, 0.01) 0px 4px 16px 0px, rgba(0, 0, 0, 0.024) 0px 2px 6px 0px, rgba(0, 0, 0, 0.01) 0px 0px 2px 0px",
+        custom2:
+          "rgba(0, 0, 0, 0.02) 0px -20px 43.008px 0px, rgba(0, 0, 0, 0.01) 0px -4px 16px 0px, rgba(0, 0, 0, 0.024) 0px -2px 6px 0px, rgba(0, 0, 0, 0.01) 0px 0px 2px 0px",
       },
     },
   },
