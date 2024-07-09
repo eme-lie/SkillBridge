@@ -19,9 +19,10 @@ import {
 const Navbar = () => {
   const location = useLocation();
   const pathSegment = location.pathname.split("/")[1]; // Gets the first segment of the path
+  const pathSegment2 = location.pathname.split("/")[2]; // Gets the second segment of the path
   return (
-    <div className="navbar flex flex-col shadow-custom1 ">
-      <div className="nav-top flex flex-col pt-2 pr-6 pl-6 pb-2 md:pt-4 md:pr-16 md:pl-16 lg:pb-0 justify-center lg:gap-y-8">
+    <div className="navbar flex flex-col gap-x-2 shadow-custom1 ">
+      <div className="nav-top flex flex-col pt-2 pr-6 pl-6 pb-2 md:pt-4 md:pr-16 md:pl-16 lg:pb-0 justify-center lg:gap-y-4">
         <div className="nav-top-top flex flex-row justify-between ">
           <div className="nav-top-left-side flex items-center gap-x-4">
             <Sheet className="bg-background_light flex flex-col h-full">
@@ -52,14 +53,14 @@ const Navbar = () => {
             </Sheet>
 
             <img
-              src="images\SkillBridge.svg"
+              src="\images\SkillBridge.svg"
               alt=""
               className="w-24 hidden lg:block"
             />
           </div>
 
           <img
-            src="images\SkillBridge.svg"
+            src="\images\SkillBridge.svg"
             alt=""
             className="w-24 block lg:hidden"
           />
@@ -92,12 +93,12 @@ const Navbar = () => {
           <ul className="gap-x-16 hidden lg:flex">
             <li
               className={`cursor-pointer text-text_light lg:pr-2 lg:pb-1 lg:pl-2 ${
-                pathSegment === "navbar"
+                pathSegment === "internships"
                   ? "border-primary_light border-b-2 t-b3"
                   : "t-b5"
               }`}
             >
-              Internships
+              <Link to="/internships">Internships</Link>
             </li>
             <li
               className={`cursor-pointer text-text_light lg:pr-2 lg:pb-1 lg:pl-2 ${
@@ -106,7 +107,7 @@ const Navbar = () => {
                   : "t-b5"
               }`}
             >
-              Resources
+              <Link to="/resources">Resources</Link>
             </li>
             <li
               className={`cursor-pointer text-text_light lg:pr-2 lg:pb-1 lg:pl-2 ${
@@ -115,53 +116,61 @@ const Navbar = () => {
                   : "t-b5"
               }`}
             >
-              Forum
+              <Link to="/forum">Forum</Link>
             </li>
           </ul>
         </div>
       </div>
       {pathSegment === "internships" ? (
-        <div className="nav-bottom gap-x-4 flex border border-border_light border-t border-b">
-          <h1>Internships</h1>
+        <div className="nav-bottom gap-x-4 flex border-border_light border-t border-b py-4 items-center px-16">
+          <h1 className="text-t1">Internships</h1>
           <div>
             <ul className="flex gap-x-4">
-              className=
-              {`text-b4 ${
-                pathSegment === "internships"
-                  ? "border-b-2 border-l border-text-light"
-                  : ""
-              }`}
               <li
-                className={`text-b4 ${
-                  pathSegment === "saved_internships"
-                    ? "border-b-2 border-l border-text-light"
+                className={`text-b4 px-2  ${
+                  pathSegment2 === "saved_internships"
+                    ? ""
+                    : "border-b-2 border-text-light"
+                }`}
+              >
+                <Link to="/internships">search</Link>
+              </li>
+
+              <li
+                className={`text-b4 px-2 ${
+                  pathSegment2 === "saved_internships"
+                    ? "border-b-2  border-text-light"
                     : ""
                 }`}
               >
-                <Link to="/saved_internships">saved</Link>
+                <Link to="/internships/saved_internships">saved</Link>
               </li>
             </ul>
           </div>
         </div>
       ) : pathSegment === "resources" ? (
-        <div className="nav-bottom">
-          <h1>Resources</h1>
+        <div className="nav-bottom gap-x-4 flex border-border_light border-t border-b py-4 items-center px-16 ">
+          <h1 className="text-t1">Resources</h1>
           <div>
             <ul className="flex gap-x-4">
-              className=
-              {`text-b4 ${
-                pathSegment === "internships"
-                  ? "border-b-2 border-l border-text-light"
-                  : ""
-              }`}
               <li
-                className={`text-b4 ${
-                  pathSegment === "saved_resources"
-                    ? "border-b-2 border-l border-text-light"
+                className={`text-b4 px-2  ${
+                  pathSegment2 === "saved_resources"
+                    ? ""
+                    : "border-b-2 border-text-light"
+                }`}
+              >
+                <Link to="/resources">search</Link>
+              </li>
+
+              <li
+                className={`text-b4 px-2 ${
+                  pathSegment2 === "saved_resources"
+                    ? "border-b-2  border-text-light"
                     : ""
                 }`}
               >
-                <Link to="/saved_resources">saved</Link>
+                <Link to="/resources/saved_resources">saved</Link>
               </li>
             </ul>
           </div>

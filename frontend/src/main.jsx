@@ -20,8 +20,8 @@ const router = createBrowserRouter([
   },
 
   { path: "/resources", element: <Resources /> },
-  { path: "/saved_resources", element: <SavedResources /> },
-  { path: "/saved_internships", element: <SavedInternships /> },
+  { path: "resources/saved_resources", element: <SavedResources /> },
+  { path: "internships/saved_internships", element: <SavedInternships /> },
   { path: "/user_profile", element: <UserProfile /> },
 ]);
 
