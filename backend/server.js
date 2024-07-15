@@ -3,6 +3,7 @@ import internshipRoutes from "./routers/internshipRouter.js";
 import cors from "cors";
 import movieRoutes from "./routers/movieRouter.js";
 import filterRoutes from "./routers/filterRouter.js";
+import userRoutes from "./routers/userRouter.js";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 app.use("/api/internships", internshipRoutes);
 app.use("/api/movies", movieRoutes);
 app.use("/api/filters", filterRoutes);
+app.use("/api/users", userRoutes);
 
 app.listen(port, () => {
   console.log(`listening at ${port}`);
