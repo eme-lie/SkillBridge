@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 
 import "./index.css";
 import Internships from "../components/Internships.jsx";
-import Internship from "../components/Internship.jsx";
+import Internship from "../components/internship.jsx";
 
 import Resources from "../components/Resources";
 import SavedResources from "../components/SavedResources";
