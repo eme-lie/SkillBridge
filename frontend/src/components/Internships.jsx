@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/ui/input";
 import Navbar from "./Navbar";
 
 import {
@@ -18,14 +18,14 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@/ui/sheet";
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/ui/accordion";
 
 //import dotenv from "dotenv";
 //dotenv.config();

@@ -1,11 +1,8 @@
 import { useLocation } from "react-router-dom";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover.jsx";
+import { Button } from "@/ui/button.jsx";
 import { Menu } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar.jsx";
 import { Link } from "react-router-dom";
 import {
   Sheet,
@@ -14,9 +11,18 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@/ui/sheet.jsx";
+import { useLogout } from "@/hooks/useLogout";
+import { useAuthContext } from "../hooks/authHook";
 
 const Navbar = () => {
+  const { logout } = useLogout();
+  const {
+    state: { user },
+  } = useAuthContext();
+  const handleLogout = async () => {
+    await logout();
+  };
   const location = useLocation();
   const pathSegment = location.pathname.split("/")[1]; // Gets the first segment of the path
   const pathSegment2 = location.pathname.split("/")[2]; // Gets the second segment of the path
@@ -35,7 +41,7 @@ const Navbar = () => {
               >
                 <SheetHeader className="flex flex-col h-full">
                   <SheetTitle className="text-b3"></SheetTitle>
-                  <SheetDescription className="flex flex-col justify-between h-full">
+                  <SheetDescription className="flex flex-col gap-y-8 h-full">
                     <ul className="flex flex-col gap-y-4">
                       <li className="text-t2 text-text_light">
                         <Link to="/internships">Internships</Link>
@@ -47,6 +53,16 @@ const Navbar = () => {
                         <Link to="/forum">Forum</Link>
                       </li>
                     </ul>
+                    {!user && (
+                      <div className="flex flex-col gap-y-2 lg:hidden">
+                        <Button className="w-full bg-primary_light">
+                          Sign Up for Free
+                        </Button>
+                        <Button className="w-full border border-rounded border-lg">
+                          Login
+                        </Button>
+                      </div>
+                    )}
                   </SheetDescription>
                 </SheetHeader>
               </SheetContent>
@@ -66,27 +82,42 @@ const Navbar = () => {
           />
 
           <div className="nav-top-right-side flex flex-row items-center gap-x-8 ">
-            <Popover>
-              <PopoverTrigger>
-                <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </PopoverTrigger>
-              <PopoverContent>
-                <ul className="popup-list flex flex-col">
-                  <li className="t-b5 text-text_light pr-2 pb-2 pl-2  border-b-1">
-                    Profile
-                  </li>
-                  <li className="t-b5 text-text_light pr-2 pb-2 pl-2  border-b-1">
-                    My Jobs
-                  </li>
-                  <li className="t-b5 text-text_light pr-2 pb-2 pl-2">
-                    Logout
-                  </li>
-                </ul>
-              </PopoverContent>
-            </Popover>
+            {!user && (
+              <div className="hidden gap-x-4 lg:flex">
+                <Button className="w-full border border-rounded border-lg">
+                  Login
+                </Button>
+                <Button className="w-full bg-primary_light">
+                  Sign Up for Free
+                </Button>
+              </div>
+            )}
+            {user && (
+              <Popover>
+                <PopoverTrigger>
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <ul className="popup-list flex flex-col">
+                    <li className="t-b5 text-text_light pr-2 pb-2 pl-2  border-b-1">
+                      Profile
+                    </li>
+                    <li className="t-b5 text-text_light pr-2 pb-2 pl-2  border-b-1">
+                      My Jobs
+                    </li>
+                    <li
+                      className="t-b5 text-text_light pr-2 pb-2 pl-2"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </li>
+                  </ul>
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
         </div>
         <div className="nav-top-bottom flex justify-center ">
