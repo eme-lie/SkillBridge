@@ -4,23 +4,23 @@ import validator from "validator";
 
 const userSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
+    userType: { type: String, required: true },
     password: { type: String, required: true },
     isAdmin: { type: Boolean, required: true, default: false },
-    userType: { type: String, required: true },
   },
   { timestamps: true }
 );
 
 //static signup method
-userSchema.statics.signup = async function (name, email, password, userType) {
-  if (!email || !password || !name || !userType) {
+userSchema.statics.signup = async function (email, userType, password) {
+  if (!email || !userType || !password) {
     throw new Error("Please fill in all fields");
   }
   if (!validator.isEmail(email)) {
     throw new Error("Email is not valid");
   }
+  console.log(password);
   if (!validator.isStrongPassword(password)) {
     throw new Error("Password is not strong enough");
   }
@@ -35,7 +35,6 @@ userSchema.statics.signup = async function (name, email, password, userType) {
   const user = await this.create({
     email,
     password: hashedPassword,
-    name,
     userType,
   });
 

@@ -28,10 +28,10 @@ export const userLogin = asyncHandler(async (req, res) => {
 
 // user signUp
 export const userSignUp = asyncHandler(async (req, res) => {
-  const { name, email, password, userType } = req.body;
+  const { email, userType, password } = req.body;
 
   try {
-    const user = await userModel.signup(name, email, password, userType);
+    const user = await userModel.signup(email, userType, password);
 
     //generate token
     const token = generateToken(user._id);

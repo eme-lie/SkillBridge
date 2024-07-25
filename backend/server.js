@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 app.use("/api/internships", internshipRoutes);
 app.use("/api/movies", movieRoutes);
 app.use("/api/filters", filterRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/user", userRoutes);
 
 app.listen(port, () => {
   console.log(`listening at ${port}`);

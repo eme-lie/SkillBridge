@@ -20,7 +20,7 @@ export default {
 
       fontSize: {
         h1: ["36px", { lineHeight: "43.2px", fontWeight: "700" }],
-        h2: ["21px", { lineHeight: "25px", fontWeight: "300" }],
+        h2: ["21px", { lineHeight: "25px", fontWeight: "700" }],
         t1: ["16px", { lineHeight: "24px", fontWeight: "700" }],
         t2: ["16px", { lineHeight: "24px", fontWeight: "500" }],
         t3: ["14px", { lineHeight: "17px", fontWeight: "700" }],
@@ -59,8 +59,12 @@ export default {
         destructive_hover_dark: "#B33A3A",
       },
       width: {
+        25: "25%",
         30: "30%",
+        35: "35%",
         55: "55%",
+        65: "65%",
+        75: "75%",
         45: "45%",
       },
       keyframes: {

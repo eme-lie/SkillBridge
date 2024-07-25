@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/ui/input";
 import Navbar from "./Navbar";
+import { Link } from "react-router-dom";
 
 import {
   SlidersHorizontal,
@@ -18,14 +19,14 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@/ui/sheet";
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/ui/accordion";
 
 //import dotenv from "dotenv";
 //dotenv.config();
@@ -384,43 +385,47 @@ const Internships = () => {
 
           <div className="internships flex flex-col gap-y-4">
             {internships.map((internship) => (
-              <div
-                className="flex flex-col border border-border_light pt-4 pr-8 pb-4 pl-8 rounded-lg hover:bg-hover_light cursor-pointer justify-between"
+              <Link
+                to={`/internships/${internship._id}`}
+                className="no-underline"
                 key={internship._id}
               >
-                <div className="flex internship-top justify-between items-center">
-                  <h3 className="text-t1 hover:text-primary_light cursor-pointer ">
-                    {internship.title}
-                  </h3>
-                  {/* <BookmarkCheck className="primary_light w-8 />  */}
+                <div className="flex flex-col border border-border_light pt-4 pr-8 pb-4 pl-8 rounded-lg hover:bg-hover_light cursor-pointer justify-between">
+                  <div className="flex internship-top justify-between items-center">
+                    <h3 className="text-t1 hover:text-primary_light cursor-pointer ">
+                      {internship.title}
+                    </h3>
+                    {/* <BookmarkCheck className="primary_light w-8 />  */}
 
-                  <Bookmark className="icon_light w-8" />
-                </div>
-                <div className="internship-bottom flex gap-x-4">
-                  <img className="w-20 h-20" src={internship.logo} alt="" />
-                  <div className="internship-left-bottom-right flex flex-col gap-y-1 justify-center">
-                    <p className="text-b4 text-primary_light">
-                      {internship.employer}
-                    </p>
-                    <div className="flex gap-x-1 items-center">
-                      <MapPin className="icon_light w-4" />
-
-                      <p className="text-b4 text-text_light">
-                        {internship.location}
+                    <Bookmark className="icon_light w-8" />
+                  </div>
+                  <div className="internship-bottom flex gap-x-4">
+                    <img className="w-20 h-20" src={internship.logo} alt="" />
+                    <div className="internship-left-bottom-right flex flex-col gap-y-1 justify-center">
+                      <p className="text-b4 text-primary_light">
+                        {internship.employer}
                       </p>
-                    </div>
-                    <div className="flex gap-x-1 items-center">
-                      <Calendar className="icon_light w-4" />
+                      <div className="flex gap-x-1 items-center">
+                        <MapPin className="icon_light w-4" />
 
-                      <p className="text-b4 text-text_light">
-                        {new Date(internship.createdAt).toLocaleDateString()}
-                      </p>
+                        <p className="text-b4 text-text_light">
+                          {internship.location}
+                        </p>
+                      </div>
+                      <div className="flex gap-x-1 items-center">
+                        <Calendar className="icon_light w-4" />
+
+                        <p className="text-b4 text-text_light">
+                          {new Date(internship.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
+
           <div>
             <button
               onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
