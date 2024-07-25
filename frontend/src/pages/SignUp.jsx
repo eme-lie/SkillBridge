@@ -142,19 +142,17 @@ const Signup = () => {
               </div>
             </div>
 
-            <Link to="/home">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={`button-class ${
-                  isSubmitting
-                    ? "bg-primary_light bg-opacity-70 w-fit text-text_light pt-4 pr-6 pb-4 pl-6 rounded text-lg font-medium"
-                    : "bg-primary_light w-fit text-text_light pt-3 pr-4 pb-3 pl-4 md:pt-4 md:pr-6 md:pb-4 md:pl-6 rounded font-medium text-sm md:text-lg"
-                }`}
-              >
-                Sign Up for free
-              </button>
-            </Link>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={`button-class ${
+                isSubmitting
+                  ? "bg-primary_light bg-opacity-70 w-fit text-text_light pt-4 pr-6 pb-4 pl-6 rounded text-lg font-medium"
+                  : "bg-primary_light w-fit text-text_light pt-3 pr-4 pb-3 pl-4 md:pt-4 md:pr-6 md:pb-4 md:pl-6 rounded font-medium text-sm md:text-lg"
+              }`}
+            >
+              Sign Up for free
+            </button>
 
             {/* Render general error message */}
             {errors._general && (

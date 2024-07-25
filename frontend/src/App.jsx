@@ -1,14 +1,15 @@
 //import { Outlet } from "react-router-dom";
-import Internships from "./components/Internships.jsx";
-import Internship from "./components/internship.jsx";
-import Signup from "./components/SignUp.jsx";
-import Login from "./components/Login.jsx";
-import Home from "./components/Home.jsx";
+import Internships from "./pages/Internships.jsx";
+import Internship from "./pages/internship.jsx";
+import Signup from "./pages/SignUp.jsx";
+import Login from "./pages/Login.jsx";
+import Home from "./pages/Home.jsx";
+import Discussions from "./pages/Discussions.jsx";
 
-import Resources from "./components/Resources";
-import SavedResources from "./components/SavedResources";
-import SavedInternships from "./components/SavedInternships";
-import UserProfile from "./components/UserProfile";
+import Resources from "./pages/Resources.jsx";
+import SavedResources from "./pages/SavedResources.jsx";
+import SavedInternships from "./pages/SavedInternships.jsx";
+import UserProfile from "./pages/UserProfile.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -27,6 +28,7 @@ export const App = () => {
     { path: "/signup", element: <Signup /> },
     { path: "/login", element: <Login /> },
     { path: "/Home", element: <Home /> },
+    { path: "/discussions", element: <Discussions /> },
   ]);
   return (
     <>

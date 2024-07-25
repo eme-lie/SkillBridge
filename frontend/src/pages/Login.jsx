@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useLogin } from "@/hooks/useLogin";
-import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 
 const schema = z.object({
@@ -57,7 +56,6 @@ const Login = () => {
       className="signupbackground bg-cover h-screen flex pt-4 pr-8 pb-4 pl-8 lg:pt-8 lg:pr-20 lg:pb-8 lg:pl-20 md:pt-8 md:pr-12 md:pb-8 md:pl-12"
       style={{ backgroundImage: `url(/images/signupandloginbackground.png)` }}
     >
-      <Navbar />
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate
