@@ -4,6 +4,7 @@ import Internship from "./pages/internship.jsx";
 import Signup from "./pages/SignUp.jsx";
 import Login from "./pages/Login.jsx";
 import Home from "./pages/Home.jsx";
+import CreateDiscussion from "./pages/CreateDiscussion.jsx";
 import Discussions from "./pages/Discussions.jsx";
 
 import Resources from "./pages/Resources.jsx";
@@ -28,6 +29,7 @@ export const App = () => {
     { path: "/signup", element: <Signup /> },
     { path: "/login", element: <Login /> },
     { path: "/Home", element: <Home /> },
+    { path: "/create_discussion", element: <CreateDiscussion /> },
     { path: "/discussions", element: <Discussions /> },
   ]);
   return (
