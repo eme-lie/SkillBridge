@@ -1,9 +1,9 @@
 //import { useLocation } from "react-router-dom";
-//import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover.jsx";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover.jsx";
 import { Button } from "@/ui/button.jsx";
 import { Menu } from "lucide-react";
-//import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar.jsx";
-import { Link } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar.jsx";
+import { Link, useNavigate } from "react-router-dom";
 import {
   MessagesSquare,
   MessageSquareShare,
@@ -25,12 +25,14 @@ import { useLogout } from "@/hooks/useLogout";
 import { useAuthContext } from "../hooks/authHook";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const { logout } = useLogout();
   const {
     state: { user },
   } = useAuthContext();
   const handleLogout = async () => {
     await logout();
+    navigate("/login");
   };
   //const location = useLocation();
   //const pathSegment = location.pathname.split("/")[1]; // Gets the first segment of the path
@@ -87,40 +89,20 @@ const Navbar = () => {
                     </span>
                   </Link>
                 </div>
-                <div className="side-nav-bottom flex flex-col gap-y-6 py-12 pr-8 border-r">
-                  {!user && (
-                    <Link
-                      to="/discussions"
-                      className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
-                    >
-                      <User
-                        className="icon transition-colors duration-200"
-                        size={16}
-                      />
-                      <span className="text-b4 transition-colors duration-200 group-hover:text-primary_light ">
-                        Profile
-                      </span>
+                {!user && (
+                  <div className=" side-nav-bottom flex flex-col gap-y-2 py-12 pr-8 border-r ">
+                    <Link to="/login">
+                      <Button className="w-full border border-rounded border-lg">
+                        Login
+                      </Button>
                     </Link>
-                  )}
-                  {!user && (
-                    <Link
-                      to="/discussions"
-                      className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
-                    >
-                      <LogOut
-                        className="icon transition-colors duration-200"
-                        size={16}
-                      />
-
-                      <span
-                        className="text-b4 transition-colors duration-200 group-hover:text-primary_light"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </span>
+                    <Link to="/sign_up">
+                      <Button className="w-full bg-primary_light">
+                        Sign Up
+                      </Button>
                     </Link>
-                  )}
-                </div>
+                  </div>
+                )}
               </SheetDescription>
             </SheetHeader>
           </SheetContent>
@@ -142,11 +124,55 @@ const Navbar = () => {
       <div className="nav-top-right-side flex flex-row items-center gap-x-8 ">
         {!user && (
           <div className=" flex gap-x-4 ">
-            <Button className="w-full border border-rounded border-lg">
-              Login
-            </Button>
-            <Button className="w-full bg-primary_light">Sign Up</Button>
+            <Link to="/login">
+              <Button className="w-full border border-rounded border-lg">
+                Login
+              </Button>
+            </Link>
+            <Link to="/sign_up">
+              <Button className="w-full bg-primary_light">Sign Up</Button>
+            </Link>
           </div>
+        )}
+        {user && (
+          <Popover>
+            <PopoverTrigger>
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </PopoverTrigger>
+            <PopoverContent className="bg-background_light">
+              <div className="popup-list flex flex-col gap-y-4 bg-background_light">
+                <Link
+                  to="/discussions"
+                  className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
+                >
+                  <User
+                    className="icon transition-colors duration-200"
+                    size={16}
+                  />
+                  <span className="text-b4 transition-colors duration-200 group-hover:text-primary_light ">
+                    Profile
+                  </span>
+                </Link>
+
+                <div className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light">
+                  <LogOut
+                    className="icon transition-colors duration-200"
+                    size={16}
+                  />
+
+                  <span
+                    className="text-b4 transition-colors duration-200 group-hover:text-primary_light"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </span>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
         )}
         {/*<Popover>
           <PopoverTrigger>

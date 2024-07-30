@@ -12,24 +12,23 @@ const Discussions = () => {
       <div className="main-container flex flex-row lg:pt-4 lg:pr-16 lg:pl-4">
         <Sidenavbar />
         <div className="right-container flex flex-col flex-1 px-4 py-4">
-          <div className="top flex flex-col h-16 gap-y-4 py-8 border-b border-b-border_light flex-1">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col gap-y-1">
-                <h1 className="text-h2">Discussion</h1>
-                <div className="flex gap-x-2">
-                  <Info size={14} />
-                  <p className="text-sb1">Discussions</p>
-                </div>
+          <div className="flex items-center justify-between border-b border-b-border_light pb-4">
+            <div className="flex flex-col gap-y-1">
+              <h1 className="text-h2">Discussion</h1>
+              <div className="flex gap-x-2">
+                <Info size={14} />
+                <p className="text-sb1">Discussions</p>
               </div>
-
-              <Button
-                className="bg-primary_light text-text_light rounded-lg w-fit px-6 py-2 text-sm font-medium"
-                onClick={() => console.log("clicked")}
-              >
-                Create Discussion
-              </Button>
             </div>
+
+            <Button
+              className="bg-primary_light text-text_light rounded-lg w-fit px-6 py-2 text-sm font-medium"
+              onClick={() => console.log("clicked")}
+            >
+              Create Discussion
+            </Button>
           </div>
+
           <div className="bottom flex flex-col lg:flex-row py-8 gap-x-8 gap-y-8">
             <div className="bottom-left flex-1 gap-y-4">
               <div className="bottom-left-top flex items-center justify-between ">

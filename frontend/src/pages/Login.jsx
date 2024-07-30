@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useLogin } from "@/hooks/useLogin";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const schema = z.object({
   email: z
@@ -15,6 +15,7 @@ const schema = z.object({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
   const { login } = useLogin();
   const {
     register,
@@ -25,6 +26,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       await login(data);
+      navigate("/discussions");
       // Optionally, redirect the user to a dashboard or home page
       // navigate('/dashboard'); // Assuming you have a navigate function from useNavigate hook
     } catch (error) {
