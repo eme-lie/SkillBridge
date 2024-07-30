@@ -9,7 +9,7 @@ import Discussions from "./pages/Discussions.jsx";
 
 import Resources from "./pages/Resources.jsx";
 import SavedResources from "./pages/SavedResources.jsx";
-import SavedInternships from "./pages/SavedInternships.jsx";
+import SavedDiscussions from "./pages/SavedDiscussions.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -24,7 +24,7 @@ export const App = () => {
 
     { path: "/resources", element: <Resources /> },
     { path: "resources/saved_resources", element: <SavedResources /> },
-    { path: "internships/saved_internships", element: <SavedInternships /> },
+    { path: "saved_discussions", element: <SavedDiscussions /> },
     { path: "/user_profile", element: <UserProfile /> },
     { path: "/signup", element: <Signup /> },
     { path: "/login", element: <Login /> },
