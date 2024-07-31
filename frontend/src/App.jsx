@@ -11,6 +11,7 @@ import Resources from "./pages/Resources.jsx";
 import SavedResources from "./pages/SavedResources.jsx";
 import SavedDiscussions from "./pages/SavedDiscussions.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
+import Discussion from "./pages/Discussion.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -26,11 +27,12 @@ export const App = () => {
     { path: "resources/saved_resources", element: <SavedResources /> },
     { path: "saved_discussions", element: <SavedDiscussions /> },
     { path: "/user_profile", element: <UserProfile /> },
-    { path: "/signup", element: <Signup /> },
+    { path: "/sign_up", element: <Signup /> },
     { path: "/login", element: <Login /> },
     { path: "/Home", element: <Home /> },
     { path: "/create_discussion", element: <CreateDiscussion /> },
     { path: "/discussions", element: <Discussions /> },
+    { path: "/discussion", element: <Discussion /> },
   ]);
   return (
     <>

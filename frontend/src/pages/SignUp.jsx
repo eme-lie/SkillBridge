@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useSignUp } from "@/hooks/useSignUp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const schema = z.object({
   email: z
@@ -20,6 +20,7 @@ const schema = z.object({
 const userTypes = ["Student", "Employer"];
 
 const Signup = () => {
+  const navigate = useNavigate();
   const { signUp } = useSignUp();
   const {
     register,
@@ -31,6 +32,7 @@ const Signup = () => {
   const onSubmit = async (data) => {
     try {
       await signUp(data);
+      navigate("/discussions");
       // Optionally, redirect the user to a dashboard or home page
       // navigate('/dashboard'); // Assuming you have a navigate function from useNavigate hook
     } catch (error) {

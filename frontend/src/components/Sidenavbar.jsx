@@ -1,26 +1,30 @@
-import { useLogout } from "@/hooks/useLogout";
+//import { useLogout } from "@/hooks/useLogout";
 import { useAuthContext } from "../hooks/authHook";
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 import {
   MessagesSquare,
   MessageSquareShare,
   Bookmark,
-  LogOut,
-  User,
+  //LogOut,
+  //User,
 
   /*BookmarkCheck,*/
 } from "lucide-react";
 
 const Sidenavbar = () => {
-  const { logout } = useLogout();
+  //const { logout } = useLogout();
   const {
     state: { user },
   } = useAuthContext();
-  const handleLogout = async () => {
+  {
+    /*const handleLogout = async () => {
     await logout();
-  };
+  }; */
+  }
+
   return (
-    <div className="side-nav flex flex-col justify-between hidden lg:flex flex-col">
+    <div className="side-nav flex flex-col justify-between h-screen hidden lg:flex flex-col">
       <div className="side-nav-top flex flex-col gap-y-6 py-12 pr-8 border-r">
         <Link
           to="/discussions"
@@ -56,7 +60,19 @@ const Sidenavbar = () => {
           </span>
         </Link>
       </div>
-      <div className="side-nav-bottom flex flex-col gap-y-6 py-12 pr-8 border-r">
+      {!user && (
+        <div className=" side-nav-bottom flex flex-col gap-y-2 py-12 pr-8 border-r ">
+          <Link to="/login">
+            <Button className="w-full border border-rounded border-lg">
+              Login
+            </Button>
+          </Link>
+          <Link to="/sign_up">
+            <Button className="w-full bg-primary_light">Sign Up</Button>
+          </Link>
+        </div>
+      )}
+      {/*<div className="side-nav-bottom flex flex-col gap-y-6 py-12 pr-8 border-r">
         {user && (
           <Link
             to="/discussions"
@@ -68,7 +84,7 @@ const Sidenavbar = () => {
             </span>
           </Link>
         )}
-        {user && (
+        user && (
           <Link
             to="/discussions"
             className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
@@ -82,8 +98,8 @@ const Sidenavbar = () => {
               Logout
             </span>
           </Link>
-        )}
-      </div>
+        )
+      </div>*/}
     </div>
   );
 };
