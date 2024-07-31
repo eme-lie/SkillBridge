@@ -5,6 +5,7 @@ import { useSignUp } from "@/hooks/useSignUp";
 import { Link, useNavigate } from "react-router-dom";
 
 const schema = z.object({
+  displayName: z.string().min(1, { message: "DisplayName is required" }),
   email: z
     .string()
     .min(1, { message: "Email is required" })
@@ -17,7 +18,7 @@ const schema = z.object({
   }),
 });
 
-const userTypes = ["Student", "Employer"];
+//const userTypes = ["Student", "Employer"];
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -89,22 +90,38 @@ const Signup = () => {
               Sign Up for Free with your email
             </p>
             <div className="inputs flex flex-col gap-y-4">
-              <div className="email-input-and-error flex flex-col gap-y-2">
+              <div className="displayName-input-and-error flex flex-col gap-y-2">
                 <input
-                  {...register("email")}
-                  type="email"
-                  placeholder="email"
-                  className={`email-input h-12 w-full rounded border border-Neutral300_Border border-solid focus:outline text-Neutral900_Text_main pl-4 ${
-                    errors.email ? "error-class border-destructive" : ""
+                  {...register("displayName")}
+                  type="displayName"
+                  placeholder="Enter displayName"
+                  className={`displayName-input h-12 w-full rounded border border-Neutral300_Border border-solid focus:outline text-Neutral900_Text_main pl-4 ${
+                    errors.displayName ? "error-class border-destructive" : ""
                   }`}
                 />
-                {errors.email && (
+                {errors.displayName && (
                   <p className="error-response text-b4 text-destructive_light">
-                    {errors.email.message}
+                    {errors.displayName.message}
                   </p>
                 )}
               </div>
-              <div className="userTypeanddropdown flex flex-col gap-y-2">
+              <div className="inputs flex flex-col gap-y-4">
+                <div className="email-input-and-error flex flex-col gap-y-2">
+                  <input
+                    {...register("email")}
+                    type="email"
+                    placeholder="Enter your email"
+                    className={`email-input h-12 w-full rounded border border-Neutral300_Border border-solid focus:outline text-Neutral900_Text_main pl-4 ${
+                      errors.email ? "error-class border-destructive" : ""
+                    }`}
+                  />
+                  {errors.email && (
+                    <p className="error-response text-b4 text-destructive_light">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+                {/*<div className="userTypeanddropdown flex flex-col gap-y-2">
                 <select
                   {...register("userType")}
                   placeholder="Select userType"
@@ -125,53 +142,54 @@ const Signup = () => {
                     {errors.userType.message}
                   </p>
                 )}
+              </div>*/}
+
+                <div className="input-and-error flex flex-col gap-y-2">
+                  <input
+                    {...register("password")}
+                    type="password"
+                    placeholder="Enter your password"
+                    className={`password-input h-12 w-full rounded border border-Neutral300_Border border-solid focus:outline text-Neutral900_Text_main pl-4 ${
+                      errors.password ? "error-class border-destructive" : ""
+                    }`}
+                  />
+                  {errors.password && (
+                    <p className="error-response text-destructive_light text-b4">
+                      {errors.password.message}
+                    </p>
+                  )}
+                </div>
               </div>
 
-              <div className="input-and-error flex flex-col gap-y-2">
-                <input
-                  {...register("password")}
-                  type="password"
-                  placeholder="password"
-                  className={`password-input h-12 w-full rounded border border-Neutral300_Border border-solid focus:outline text-Neutral900_Text_main pl-4 ${
-                    errors.password ? "error-class border-destructive" : ""
-                  }`}
-                />
-                {errors.password && (
-                  <p className="error-response text-destructive_light text-b4">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-            </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`button-class ${
+                  isSubmitting
+                    ? "bg-primary_light bg-opacity-70 w-fit text-text_light pt-4 pr-6 pb-4 pl-6 rounded text-lg font-medium"
+                    : "bg-primary_light w-fit text-text_light pt-3 pr-4 pb-3 pl-4 md:pt-4 md:pr-6 md:pb-4 md:pl-6 rounded font-medium text-sm md:text-lg"
+                }`}
+              >
+                Sign Up for free
+              </button>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`button-class ${
-                isSubmitting
-                  ? "bg-primary_light bg-opacity-70 w-fit text-text_light pt-4 pr-6 pb-4 pl-6 rounded text-lg font-medium"
-                  : "bg-primary_light w-fit text-text_light pt-3 pr-4 pb-3 pl-4 md:pt-4 md:pr-6 md:pb-4 md:pl-6 rounded font-medium text-sm md:text-lg"
-              }`}
-            >
-              Sign Up for free
-            </button>
-
-            {/* Render general error message */}
-            {errors._general && (
-              <p className="error-response text-destructive_light text-b4 mt-2">
-                {errors._general.message}
-              </p>
-            )}
-
-            <div className="login-container flex gap-x-2">
-              <p className="login-text text-sm md:text-lg text-text_dark">
-                Already have an account?
-              </p>
-              <Link to="/login">
-                <p className="login-text-button underline text-sm md:text-lg font-medium text-text_dark">
-                  Log In
+              {/* Render general error message */}
+              {errors._general && (
+                <p className="error-response text-destructive_light text-b4 mt-2">
+                  {errors._general.message}
                 </p>
-              </Link>
+              )}
+
+              <div className="login-container flex gap-x-2">
+                <p className="login-text text-sm md:text-lg text-text_dark">
+                  Already have an account?
+                </p>
+                <Link to="/login">
+                  <p className="login-text-button underline text-sm md:text-lg font-medium text-text_dark">
+                    Log In
+                  </p>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
