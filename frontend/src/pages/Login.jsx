@@ -131,7 +131,7 @@ const Login = () => {
               <p className="login-text text-sm md:text-lg text-text_dark">
                 Dont have an account?
               </p>
-              <Link to="/signup">
+              <Link to="/sign_up">
                 <p className="login-text-button underline text-sm md:text-lg font-medium text-text_dark">
                   SignUp
                 </p>

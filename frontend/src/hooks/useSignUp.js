@@ -4,11 +4,11 @@ import axios from "axios";
 export const useSignUp = () => {
   const { dispatch } = useAuthContext();
 
-  const signUp = async ({ email, password, userType }) => {
+  const signUp = async ({ displayName, email, password }) => {
     try {
       const response = await axios.post("/api/user/signup", {
+        displayName,
         email,
-        userType,
         password,
       });
 
