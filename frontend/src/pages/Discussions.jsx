@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import { Button } from "@/components/ui/button";
 import { SlidersHorizontal, Info } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover.jsx";
+import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar.jsx";
 
 const Discussions = () => {
   return (
@@ -140,11 +141,19 @@ const Discussions = () => {
                         0
                       </p>
                       <div className="other-details-right flex gap-x-4">
-                        <div className="other-details-right-left flex gap-x-1">
-                          <p className="text-b3">11</p>
-                          <p className="text-b5">replied</p>
+                        <div className="other-details-right-1 flex gap-x-1 items-center">
+                          <Avatar className="h-4 w-4">
+                            <AvatarImage src="https://github.com/shadcn.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+
+                          <p className="text-sb1">Emelie Obiora</p>
                         </div>
-                        <p className="text-b5">1 hour ago</p>
+                        <div className="other-details-right-2 flex gap-x-1">
+                          <p className="text-b3">11</p>
+                          <p className="text-sb1">replied</p>
+                        </div>
+                        <p className="text-sb1">1 hour ago</p>
                       </div>
                     </div>
                   </div>
