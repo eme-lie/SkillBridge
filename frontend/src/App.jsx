@@ -25,14 +25,15 @@ export const App = () => {
 
     { path: "/resources", element: <Resources /> },
     { path: "resources/saved_resources", element: <SavedResources /> },
-    { path: "saved_discussions", element: <SavedDiscussions /> },
+    { path: "/saved_discussions", element: <SavedDiscussions /> },
     { path: "/user_profile", element: <UserProfile /> },
     { path: "/sign_up", element: <Signup /> },
     { path: "/login", element: <Login /> },
     { path: "/Home", element: <Home /> },
     { path: "/create_discussion", element: <CreateDiscussion /> },
+    { path: "/edit_discussion/:id", element: <CreateDiscussion /> },
     { path: "/discussions", element: <Discussions /> },
-    { path: "/discussion", element: <Discussion /> },
+    { path: "/discussions/:id", element: <Discussion /> },
   ]);
   return (
     <>

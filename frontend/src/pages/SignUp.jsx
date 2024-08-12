@@ -13,9 +13,6 @@ const schema = z.object({
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters" }),
-  userType: z.enum(["Student", "Employer"], {
-    message: "User type is required",
-  }),
 });
 
 //const userTypes = ["Student", "Employer"];

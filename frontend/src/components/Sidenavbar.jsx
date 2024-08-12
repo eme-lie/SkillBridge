@@ -24,7 +24,7 @@ const Sidenavbar = () => {
   }
 
   return (
-    <div className="side-nav flex flex-col justify-between h-screen hidden lg:flex flex-col">
+    <div className="side-nav flex flex-col justify-between h-screen hidden md:flex flex-col">
       <div className="side-nav-top flex flex-col gap-y-6 py-12 pr-8 border-r">
         <Link
           to="/discussions"
@@ -51,7 +51,7 @@ const Sidenavbar = () => {
           </span>
         </Link>
         <Link
-          to="/discussions"
+          to="/saved_discussions"
           className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
         >
           <Bookmark className="icon transition-colors duration-200" size={16} />

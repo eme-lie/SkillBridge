@@ -10,22 +10,54 @@ import {
   /*BookmarkCheck,*/
 } from "lucide-react";
 import DiscussionsGuidelines from "@/components/DiscussionsGuidelines";
-
-const tags = ["Leadership", "Communication"];
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuthContext } from "../hooks/authHook";
+import { useEffect, useState } from "react";
 
 const CreateDiscussion = () => {
-  const formSchema = z.object({
-    title: z
-      .string()
-      .min(1, { message: "title is required" })
-      .max(100, { message: "title is too long" }),
-    description: z
-      .string()
-      .min(8, { message: "description must be at least 8 characters" }),
-    tag: z.enum(tags, {
-      message: "tag is required",
-    }),
-  });
+  const navigate = useNavigate();
+  const [tags, setTags] = useState([]);
+  const [formSchema, setFormSchema] = useState(
+    z.object({
+      title: z
+        .string()
+        .min(1, { message: "title is required" })
+        .max(100, { message: "title is too long" }),
+      description: z
+        .string()
+        .min(20, { message: "description must be at least 20 characters" }),
+      tag: z.string(), // placeholder
+    })
+  );
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      const { data } = await axios.get("/api/filters/tags");
+      console.log(data);
+      setTags(data);
+
+      setFormSchema(
+        z.object({
+          title: z
+            .string()
+            .min(1, { message: "title is required" })
+            .max(100, { message: "title is too long" }),
+          description: z
+            .string()
+            .min(8, { message: "description must be at least 8 characters" }),
+          tag: z.enum(
+            data.map((tag) => tag.name),
+            {
+              message: "tag is required",
+            }
+          ),
+        })
+      );
+    };
+
+    fetchTags();
+  }, []);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -37,8 +69,38 @@ const CreateDiscussion = () => {
     //setError,
     formState: { errors, isSubmitting },
   } = form;
+  const {
+    state: { user },
+  } = useAuthContext();
 
-  const onSubmit = () => {};
+  const onSubmit = async (data) => {
+    // Add user ID to the data object
+    const requestData = {
+      ...data,
+      user: user.id,
+    };
+
+    try {
+      const response = await axios.post("/api/discussions", requestData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response) {
+        console.log(response.error);
+      } else {
+        console.log(response.data);
+        navigate("/discussions");
+      }
+    } catch (error) {
+      console.error("Error creating discussion:", error);
+    }
+  };
+
+  if (!tags) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="flex flex-col">
@@ -100,10 +162,9 @@ const CreateDiscussion = () => {
                         errors.tag ? "error-class border-destructive" : ""
                       }`}
                     >
-                      <option value="">Select tag</option>
                       {tags.map((tag) => (
-                        <option key={tag} value={tag}>
-                          {tag}
+                        <option key={tag._id} value={tag.name}>
+                          {tag.name}
                         </option>
                       ))}
                     </select>
@@ -117,18 +178,18 @@ const CreateDiscussion = () => {
 
                   <div className="input-and-error flex flex-col gap-y-1">
                     <label className="text-t1">Description</label>
-                    <input
+                    <textarea
                       {...register("description")}
-                      type="description"
+                      type="text"
                       placeholder="Description"
-                      className={`description-input h-8 w-full rounded border  border-solid focus:border-primary_light text-sb1 pl-4 placeholder:text-sb1 ${
+                      className={`description-input h-32 w-full rounded border focus:outline pl-4 pt-2 placeholder-gray-500 placeholder-opacity-75 ${
                         errors.description
                           ? "error-class border-destructive"
                           : ""
                       }`}
                     />
                     {errors.description && (
-                      <p className="error-response text-destructive_light text-b4">
+                      <p className="error-response text-b4 text-destructive_light">
                         {errors.description.message}
                       </p>
                     )}

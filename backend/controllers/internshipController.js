@@ -14,13 +14,15 @@ export const getInternships = asyncHandler(async (req, res) => {
     const sector = req.query.sector || "";
     const employer = req.query.employer || "";
 
-    req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
+    const sortQuery = sort.split(",");
+
+    //req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
 
     let sortBy = {};
-    if (sort[1]) {
-      sortBy[sort[0]] = sort[1];
+    if (sortQuery[1]) {
+      sortBy[sortQuery[0]] = sortQuery[1];
     } else {
-      sortBy[sort[0]] = "asc";
+      sortBy[sortQuery[0]] = "asc";
     }
 
     const filterConditions = {

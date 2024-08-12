@@ -1,36 +1,39 @@
 import mongoose from "mongoose";
 
+const nestedReplySchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
+  },
+  content: { type: String, required: true },
+  upvotes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of ObjectId
+  createdAt: { type: Date, default: Date.now },
+});
+
 const replySchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
     content: { type: String, required: true },
-    upvotes: { type: Number, default: 0 },
-    replies: [
-      {
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: true,
-          ref: "User",
-        },
-        content: { type: String, required: true },
-        upvotes: { type: Number, default: 0 },
-        createdAt: { type: Date, default: Date.now },
-      },
-    ],
+    upvotes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of ObjectId
+    replies: [nestedReplySchema], // Nesting the replies schema
   },
   { timestamps: true }
 );
+
+export const Reply = mongoose.model("Reply", replySchema);
 
 const discussionSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
     title: { type: String, required: true },
     description: { type: String, required: true },
-    tags: [{ type: String }],
-    replies: [replySchema],
-    upvotes: { type: Number, default: 0 },
+    tag: { type: String, required: true },
+    replies: [replySchema], // Array of replies
+    upvotes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of ObjectId
+    status: { type: String, default: "open" },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Discussion", discussionSchema);
+export const Discussion = mongoose.model("Discussion", discussionSchema);

@@ -41,8 +41,8 @@ const Internships = () => {
   const [locations, setLocations] = useState([]);
   const [sectors, setSectors] = useState([]);
   const [employers, setEmployers] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [location, setLocation] = useState(searchParams.get("location") || "");
   const [sector, setSector] = useState(searchParams.get("sector") || "");
   const [employer, setEmployer] = useState(searchParams.get("employer") || "");
@@ -68,16 +68,9 @@ const Internships = () => {
         `http://localhost:4000/api/filters/employers`
       );
 
-      /*const [locationsResponse, sectorsResponse, employersResponse] =
-        await Promise.all([
-          axios.get(`http://localhost:4000/api/filters/locations`),
-          axios.get(`http://localhost:4000/api/filters/sectors`),
-          axios.get(`http://localhost:4000/api/filters/employers`),
-        ]);*/
-
-      setLocations(await locationsResponse.data);
-      setSectors(await sectorsResponse.data);
-      setEmployers(await employersResponse.data);
+      setLocations(locationsResponse.data);
+      setSectors(sectorsResponse.data);
+      setEmployers(employersResponse.data);
     };
 
     fetchFilters();
@@ -95,6 +88,8 @@ const Internships = () => {
       if (sector) queryParams.append("sector", sector);
       if (employer) queryParams.append("employer", employer);
 
+      setSearchParams(queryParams); // Update the URL search parameters
+
       const response = await fetch(
         `/api/internships?${queryParams.toString()}`
       );
@@ -105,20 +100,6 @@ const Internships = () => {
     };
 
     fetchInternships();
-  }, [page, limit, search, sort, location, sector, employer]);
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams();
-
-    if (page > 1) queryParams.append("page", page);
-    if (limit !== 10) queryParams.append("limit", limit);
-    if (search) queryParams.append("search", search);
-    if (sort !== "createdAt,desc") queryParams.append("sort", sort);
-    if (location) queryParams.append("location", location);
-    if (sector) queryParams.append("sector", sector);
-    if (employer) queryParams.append("employer", employer);
-
-    setSearchParams(queryParams);
   }, [page, limit, search, sort, location, sector, employer]);
 
   const handleClearFilters = () => {

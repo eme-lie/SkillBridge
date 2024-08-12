@@ -9,6 +9,12 @@ const userSchema = new mongoose.Schema(
     //userType: { type: String, required: true },
     password: { type: String, required: true },
     //isAdmin: { type: Boolean, required: true, default: false },
+    upvotedDiscussions: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Discussion" },
+    ],
+    savedDiscussions: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Discussion" },
+    ],
   },
   { timestamps: true }
 );
