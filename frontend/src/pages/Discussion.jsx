@@ -25,6 +25,7 @@ const Discussion = () => {
 
   const { id } = useParams();
   const userId = user?.id;
+  const userDisplayName = user?.userDisplayName;
   const {
     register,
     handleSubmit,
@@ -34,7 +35,11 @@ const Discussion = () => {
   const onSubmit = async (data) => {
     try {
       console.log("Submitting reply:", data);
-      await axios.put(`/api/discussions/${id}/reply`, { data, userId });
+      await axios.put(`/api/discussions/${id}/reply`, {
+        data,
+        userId,
+        userDisplayName,
+      });
     } catch (error) {
       if (
         error.response &&
@@ -60,6 +65,8 @@ const Discussion = () => {
   };
 
   const [discussion, setDiscussion] = useState(null);
+  const [upvoted, setUpvoted] = useState(false);
+  const [savedDiscussion, setSavedDiscussion] = useState(false);
 
   const saveDiscussion = async () => {
     try {
@@ -84,8 +91,8 @@ const Discussion = () => {
       const { data } = await axios.put(`/api/discussions/upvote/${id}`, {
         userId,
       });
+
       console.log("Upvoted discussion:", data);
-      setDiscussion(data);
     } catch (error) {
       console.error("Error upvoting discussion:", error);
     }
@@ -96,6 +103,7 @@ const Discussion = () => {
       try {
         console.log("Fetching data for discussion ID:", id);
         const { data } = await axios.get(`/api/discussions/${id}`);
+
         console.log("Fetched data:", data);
         setDiscussion(data);
       } catch (error) {
@@ -108,9 +116,57 @@ const Discussion = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    const checkSavedDiscussion = async () => {
+      try {
+        console.log("Checking saved status for discussion ID:", id);
+        console.log("User ID:", userId);
+
+        const { data } = await axios.get(
+          `/api/user/check_saved_discussions/${id}`,
+          {
+            params: { userId },
+          }
+        );
+
+        console.log("Checked saved status:", data);
+        setSavedDiscussion(data.userHasSavedDiscussion);
+      } catch (error) {
+        console.error("Error checking saved status:", error);
+      }
+    };
+    checkSavedDiscussion();
+  }, []);
+
+  {
+    useEffect(() => {
+      if (discussion) {
+        const checkUpvote = async () => {
+          try {
+            console.log("Checking upvote status for discussion ID:", id);
+            console.log("User ID:", userId);
+
+            const { data } = await axios.get(
+              `/api/discussions/check_upvote/${id}`,
+              {
+                userId,
+              }
+            );
+            console.log("Checked upvote status:", data);
+            setUpvoted(data.userHasUpvoted);
+          } catch (error) {
+            console.error("Error checking upvote status:", error);
+          }
+        };
+        checkUpvote();
+      }
+    }, [discussion, id, userId]);
+  }
+
   if (!discussion) {
     return <div>Loading...</div>; // Or any loading indicator
   }
+
   //const errors = {};
   return (
     <div className="flex flex-col">
@@ -156,10 +212,15 @@ const Discussion = () => {
                         size={28}
                         className="-mt-1"
                         onClick={upVoteDiscussion}
+                        color={upvoted ? "#57A2FF" : "#191A23"}
                       />
                       <p className="text-b3">{discussion.upvotes.length}</p>
                     </div>
-                    <Bookmark size={28} onClick={saveDiscussion} />
+                    <Bookmark
+                      size={28}
+                      onClick={saveDiscussion}
+                      color={savedDiscussion ? "#57A2FF" : "#191A23"}
+                    />
                   </div>
 
                   <div className="discussion-card-right flex flex-col flex-1 gap-y-2">
@@ -171,18 +232,21 @@ const Discussion = () => {
                       <p className="tag py-1 px-3 bg-background_alt_light text-b3">
                         {discussion.tag}
                       </p>
-
-                      <Popover className="">
-                        <PopoverTrigger>
-                          <CircleEllipsis size={16} />
-                        </PopoverTrigger>
-                        <PopoverContent className="bg-background_light w-54">
-                          <div className="popup-list flex flex-col gap-y-4 bg-background_light">
-                            <p className="text-b4 cursor-pointer">Edit</p>
-                            <p className="text-b4 cursor-pointer">Delete</p>
-                          </div>
-                        </PopoverContent>
-                      </Popover>
+                      {discussion.user === userId && (
+                        <Popover className="">
+                          <PopoverTrigger>
+                            <CircleEllipsis size={16} />
+                          </PopoverTrigger>
+                          <PopoverContent className="bg-background_light w-54">
+                            <div className="popup-list flex flex-col gap-y-4 bg-background_light">
+                              <Link to={`/edit_discussion/${discussion._id}`}>
+                                <p className="text-b4 cursor-pointer">Edit</p>
+                              </Link>
+                              <p className="text-b4 cursor-pointer">Delete</p>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -269,16 +333,20 @@ const Discussion = () => {
                     </select>
                   </div>
                 </div>
-                <div className="reply-card flex pb-3 pr-3 gap-x-4 border-b">
-                  <div className="flex flex-col gap-y-2">
+                <div className="reply-card flex flex-1 pb-3 pr-3 gap-x-4 border-b">
+                  <div className="flex flex-col flex-1 gap-y-2">
                     {discussion.replies.map((reply) => (
                       <div
-                        className="reply-card flex pb-3 pr-3 gap-x-4 border-b"
+                        className="reply-card flex flex-1 pb-3 pr-3 gap-x-4 border-b"
                         key={reply._id}
                       >
                         <div className="votes-div flex flex-col gap-y-2 items-center">
                           <CircleChevronUp size={32} className="-mt-1" />
-                          <p className="text-b3">10</p>
+                          <p className="text-b3">
+                            {reply.upvotes.length === 0
+                              ? 0
+                              : reply.upvotes.length}
+                          </p>
                         </div>
                         <div
                           className="reply-card-right flex flex-col gap-y-2"
@@ -287,7 +355,9 @@ const Discussion = () => {
                           <div className="top-details flex justify-between items-center">
                             <div className="flex gap-x-2 items-center">
                               <div className="h-6 w-6 bg-background_alt_light rounded"></div>
-                              <p className="text-sb1">Emelie Obiora</p>
+                              <p className="text-sb1">
+                                {reply.userDisplayName}
+                              </p>
                             </div>
                           </div>
                           <p className="text-b4">{reply.content}</p>

@@ -8,6 +8,8 @@ import {
   toggleUpvote,
   saveDiscussion,
   replyDiscussion,
+  editDiscussion,
+  checkUpvote,
 } from "../controllers/discussionController.js";
 
 // GET /api/discussions
@@ -47,5 +49,9 @@ router.route("/save_discussion/:id").put(saveDiscussion);
 router.route("/:id/reply").put(replyDiscussion);
 
 router.route("/upvote/:id").put(toggleUpvote);
+
+router.route("/edit_discussion/:id").put(editDiscussion);
+
+router.route("/check_upvote/:id").get(checkUpvote);
 
 export default router;

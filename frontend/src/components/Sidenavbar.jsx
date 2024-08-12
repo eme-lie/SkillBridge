@@ -11,9 +11,12 @@ import {
 
   /*BookmarkCheck,*/
 } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 const Sidenavbar = () => {
   //const { logout } = useLogout();
+  const location = useLocation();
+  const pathname = location.pathname;
   const {
     state: { user },
   } = useAuthContext();
@@ -25,28 +28,44 @@ const Sidenavbar = () => {
 
   return (
     <div className="side-nav flex flex-col justify-between h-screen hidden md:flex flex-col">
-      <div className="side-nav-top flex flex-col gap-y-6 py-12 pr-8 border-r">
+      <div className="side-nav-top flex flex-col gap-y-6 py-12 lg:pr-8 pl-8 md:pr-4 border-r">
         <Link
           to="/discussions"
           className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
         >
           <MessagesSquare
-            className="icon transition-colors duration-200"
+            className={`icon transition-colors duration-200 ${
+              pathname === "/discussions" ? "text-primary_light" : "text-light"
+            } hover:text-primary_light`}
             size={16}
           />
-          <span className="text-b4 transition-colors duration-200 group-hover:text-primary_light ">
+          <span
+            className={`icon transition-colors duration-200 ${
+              pathname === "/discussions" ? "text-primary_light" : "text-light"
+            } hover:text-primary_light`}
+          >
             All Discussions
           </span>
         </Link>
         <Link
-          to="/discussions"
+          to="/created_discussions"
           className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
         >
           <MessageSquareShare
-            className="icon transition-colors duration-200"
+            className={`icon transition-colors duration-200 ${
+              pathname === "/created_discussions"
+                ? "text-primary_light"
+                : "text-light"
+            } hover:text-primary_light`}
             size={16}
           />
-          <span className="text-b4 transition-colors duration-200 group-hover:text-primary_light ">
+          <span
+            className={`icon transition-colors duration-200 ${
+              pathname === "/created_discussions"
+                ? "text-primary_light"
+                : "text-light"
+            } hover:text-primary_light`}
+          >
             My Posts
           </span>
         </Link>
@@ -54,8 +73,21 @@ const Sidenavbar = () => {
           to="/saved_discussions"
           className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
         >
-          <Bookmark className="icon transition-colors duration-200" size={16} />
-          <span className="text-b4 transition-colors duration-200 group-hover:text-primary_light">
+          <Bookmark
+            className={`icon transition-colors duration-200 ${
+              pathname === "/saved_discussions"
+                ? "text-primary_light"
+                : "text-light"
+            } hover:text-primary_light`}
+            size={16}
+          />
+          <span
+            className={`icon transition-colors duration-200 ${
+              pathname === "/saved_discussions"
+                ? "text-primary_light"
+                : "text-light"
+            } hover:text-primary_light`}
+          >
             Saves
           </span>
         </Link>

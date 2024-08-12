@@ -10,12 +10,28 @@ import {
   /*BookmarkCheck,*/
 } from "lucide-react";
 import DiscussionsGuidelines from "@/components/DiscussionsGuidelines";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuthContext } from "../hooks/authHook";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const CreateDiscussion = () => {
+  const { id } = useParams();
+  useEffect(() => {
+    const fetchDiscussion = async () => {
+      if (id) {
+        const { data } = await axios.get(`/api/discussions/${id}`);
+        console.log(data);
+        // Set form values to the discussion data
+        form.setValue("title", data.title);
+        form.setValue("description", data.description);
+        form.setValue("tag", data.tag);
+      }
+    };
+    fetchDiscussion();
+  }, []);
+
   const navigate = useNavigate();
   const [tags, setTags] = useState([]);
   const [formSchema, setFormSchema] = useState(
@@ -78,9 +94,29 @@ const CreateDiscussion = () => {
     const requestData = {
       ...data,
       user: user.id,
+      userDisplayName: user.userDisplayName,
     };
 
     try {
+      if (id) {
+        const response = await axios.put(
+          `/api/discussions/edit_discussion/${id}`,
+          requestData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response) {
+          console.log(response.error);
+        } else {
+          console.log(response.data);
+          navigate("/discussions");
+        }
+        return;
+      }
       const response = await axios.post("/api/discussions", requestData, {
         headers: {
           "Content-Type": "application/json",
@@ -109,10 +145,13 @@ const CreateDiscussion = () => {
         <Sidenavbar />
         <div className="right-container flex flex-col flex-1 px-4 py-4">
           <div className="top flex flex-col h-16 gap-y-4 py-8 border-b border-b-border_light flex-1">
-            <div className="top-top flex gap-x-2 items-center">
-              <ChevronLeft size={14} />
-              <p className="text-sb1">Discussions</p>
-            </div>
+            <Link to="/discussions">
+              <div className="top-top flex gap-x-2 items-center">
+                <ChevronLeft size={14} />
+                <p className="text-sb1">Discussions</p>
+              </div>
+            </Link>
+
             <h1 className="text-h2">Create New Discussion</h1>
           </div>
           <div className="bottom flex flex-col lg:flex-row py-8 gap-x-8 gap-y-8">
@@ -126,12 +165,12 @@ const CreateDiscussion = () => {
                   <div className="title-input-and-error flex flex-col flex-1 gap-y-2">
                     <div className="label-and-sub-label flex flex-col gap-y-1">
                       <label className="text-t1">Title</label>
-                      <div className="flex justify-between">
-                        <p className="text-sb1">
+                      <div className="flex justify-between gap-x-4">
+                        <p className="text-sb1 max-w-6xl">
                           What’s your discussion topic? Be specific and imagine
                           you’re speaking with another person.
                         </p>
-                        <p className="text-sb1">0 / 130 characters</p>
+                        <p className="text-sb1 w-56">0 / 130 characters</p>
                       </div>
                     </div>
                     <input
@@ -205,7 +244,7 @@ const CreateDiscussion = () => {
                       : "bg-primary_light w-fit text-text_light pt-3 pr-4 pb-3 pl-4 md:pt-4 md:pr-6 md:pb-4 md:pl-6 rounded font-medium text-sm md:text-lg"
                   }`}
                 >
-                  Post Discussion
+                  {id ? "Edit Discussion" : "Create Discussion"}
                 </Button>
 
                 {/* Render general error message */}

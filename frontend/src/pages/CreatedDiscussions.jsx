@@ -6,23 +6,33 @@ import { useAuthContext } from "../hooks/authHook";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar.jsx";
-const SavedDiscussions = () => {
-  const [savedDiscussions, setSavedDiscussions] = useState([]);
+const CreatedDiscussions = () => {
+  const [createdDiscussions, setCreatedDiscussions] = useState([]);
+  console.log(createdDiscussions);
   const {
     state: { user },
   } = useAuthContext();
-  useEffect(() => {
-    const fetchSavedDiscussions = async () => {
-      const { data } = await axios.get("/api/user/saved_discussions", {
-        params: { userId: user.id },
-      });
+  const userId = user.id;
 
-      if (user.id) {
-        setSavedDiscussions(data);
-      }
-    };
-    fetchSavedDiscussions();
+  useEffect(() => {
+    if (userId) {
+      const fetchCreatedDiscussions = async () => {
+        const { data } = await axios.get("/api/user/created_discussions", {
+          params: { userId },
+        });
+
+        if (userId) {
+          setCreatedDiscussions(data);
+          console.log(data);
+        }
+      };
+      fetchCreatedDiscussions();
+    }
   }, []);
+
+  if (!createdDiscussions) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="flex flex-col">
       <Navbar />
@@ -30,10 +40,10 @@ const SavedDiscussions = () => {
         <Sidenavbar />
         <div className="right-container py-16 pl-8 pr-8 md:pl-20 md:pr-0 flex flex-col gap-y-8">
           <h1 className="text-h1">Your Saved Discussions</h1>
-          {savedDiscussions.map((discussion) => (
+          {createdDiscussions.map((discussion) => (
             <div
               key={discussion.id}
-              className="discussion-card flex pl-1 pt-2 pb-2 pr-2 gap-x-3 lg:pl-8 lg:pt-3 lg:pb-3 lg:pr-3 gap-x-6 border-t border-b"
+              className="discussion-card flex pl-1 pt-2 pb-2 pr-2 gap-x-3 lg:pl-8 lg:pt-3 lg:pb-3 lg:pr-3 gap-x-6 border-b"
             >
               <div className="discussion-card-left flex flex-col gap-y-2">
                 <div className="votes-container flex gap-x-1 items-center">
@@ -59,8 +69,8 @@ const SavedDiscussions = () => {
 
                   <p className="text-b4">{discussion.description}</p>
                 </div>
-                <div className="other-details other-details flex sm: flex-col md:flex-row justify-between md:items-center gap-y-2">
-                  <p className="tag py-1 px-1 lg:px-3 bg-background_alt_light text-b3 w-fit">
+                <div className="other-details flex sm: flex-col md:flex-row justify-between md:items-center gap-y-2">
+                  <p className="tag py-1 px-1 lg:px-3 bg-background_alt_light text-b3 w-fit ">
                     {discussion.tag}
                   </p>
                   <div className="other-details-right flex flex-row gap-x-4">
@@ -69,7 +79,7 @@ const SavedDiscussions = () => {
                         <AvatarImage src="https://github.com/shadcn.png" />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
-                      <p className="text-sb1">{discussion.userDisplayName}</p>
+                      <p className="text-sb1">Emelie Obiora</p>
                     </div>
 
                     <div className="other-details-right-2 flex gap-x-1">
@@ -90,4 +100,4 @@ const SavedDiscussions = () => {
   );
 };
 
-export default SavedDiscussions;
+export default CreatedDiscussions;

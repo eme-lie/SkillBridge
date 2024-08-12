@@ -80,18 +80,57 @@ export const getDiscussionById = asyncHandler(async (req, res) => {
 });
 
 export const createDiscussion = asyncHandler(async (req, res) => {
-  const { title, description, tag, user } = req.body;
+  const { title, description, tag, user, userDisplayName } = req.body;
 
-  const discussion = new Discussion({
-    title,
-    description,
-    tag,
-    user,
-  });
+  if (!title || !description || !tag || !user || !userDisplayName) {
+    res.status(400);
+    throw new Error("All fields are required");
+  }
 
-  const createdDiscussion = await discussion.save();
-  res.status(201).json(createdDiscussion);
+  try {
+    const discussion = new Discussion({
+      title,
+      description,
+      tag,
+      user,
+      userDisplayName,
+    });
+
+    const createdDiscussion = await discussion.save();
+
+    const the_user = await User.findById(user);
+    if (!the_user) {
+      throw new Error("User not found");
+    }
+
+    the_user.createdDiscussions.push(createdDiscussion._id);
+    await the_user.save();
+
+    res.status(201).json({
+      discussion: createdDiscussion,
+      user: the_user,
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error(error.message);
+  }
 });
+
+export const checkUpvote = async (req, res) => {
+  const discussionId = req.params.id;
+  const { userId } = req.body;
+
+  console.log({ userId });
+  console.log({ discussionId });
+
+  // Convert userId to ObjectId for consistent comparison
+  const userObjectId = mongoose.Types.ObjectId.createFromTime(userId);
+  const discussion = await Discussion.findById(discussionId);
+  const userHasUpvoted = discussion.upvotes.some((upvoteId) =>
+    upvoteId.equals(userObjectId)
+  );
+  res.status(200).json({ userHasUpvoted });
+};
 
 export const toggleUpvote = async (req, res) => {
   const discussionId = req.params.id;
@@ -181,11 +220,42 @@ export const saveDiscussion = asyncHandler(async (req, res) => {
   res.status(200).json(discussion);
 });
 
+export const getCreatedDiscussions = asyncHandler(async (req, res) => {
+  const discussionId = req.params.id;
+  const { userId } = req.body;
+  console.log({ userId });
+  console.log({ discussionId });
+
+  const discussion = await Discussion.findById(discussionId);
+  const user = await User.findById(userId);
+
+  if (!discussion) {
+    return res.status(404).json({ error: "Discussion not found" });
+  } else if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  // Check if the user has already saved the discussion
+  const hasCreated = user.createdDiscussions.includes(discussionId);
+
+  if (hasCreated) {
+    // Remove discussion ID from the CreatedDiscussions array (unsave)
+    user.createdDiscussions.pull(discussionId);
+  } else {
+    // Add discussion ID to the CreatedDiscussions array
+    user.CreatedDiscussions.push(discussionId);
+  }
+
+  await user.save();
+
+  res.status(200).json(discussion);
+});
+
 export const replyDiscussion = asyncHandler(async (req, res) => {
   const id = req.params.id;
   console.log(id);
-  const { userId, data } = req.body;
-  console.log({ userId, data });
+  const { userId, data, userDisplayName } = req.body;
+  console.log({ userId, data, userDisplayName });
 
   const discussion = await Discussion.findById(id);
 
@@ -193,9 +263,32 @@ export const replyDiscussion = asyncHandler(async (req, res) => {
     return res.status(404).json({ error: "Discussion not found" });
   }
 
-  const reply = new Reply({ user: userId, content: data.reply });
+  const reply = new Reply({
+    user: userId,
+    content: data.reply,
+    userDisplayName: userDisplayName,
+  });
 
   discussion.replies.push(reply);
+
+  await discussion.save();
+
+  res.status(200).json(discussion);
+});
+
+export const editDiscussion = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const { title, description, tag } = req.body;
+
+  const discussion = await Discussion.findById(id);
+
+  if (!discussion) {
+    return res.status(404).json({ error: "Discussion not found" });
+  }
+
+  discussion.title = title;
+  discussion.description = description;
+  discussion.tag = tag;
 
   await discussion.save();
 

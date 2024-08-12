@@ -15,6 +15,9 @@ const userSchema = new mongoose.Schema(
     savedDiscussions: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Discussion" },
     ],
+    createdDiscussions: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Discussion" },
+    ],
   },
   { timestamps: true }
 );

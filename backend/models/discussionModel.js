@@ -14,6 +14,7 @@ const nestedReplySchema = new mongoose.Schema({
 const replySchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
+    userDisplayName: { type: String, required: true },
     content: { type: String, required: true },
     upvotes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of ObjectId
     replies: [nestedReplySchema], // Nesting the replies schema
@@ -26,6 +27,7 @@ export const Reply = mongoose.model("Reply", replySchema);
 const discussionSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
+    userDisplayName: { type: String, required: true },
     title: { type: String, required: true },
     description: { type: String, required: true },
     tag: { type: String, required: true },
