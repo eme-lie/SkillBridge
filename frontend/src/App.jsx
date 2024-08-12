@@ -12,6 +12,7 @@ import SavedResources from "./pages/SavedResources.jsx";
 import SavedDiscussions from "./pages/SavedDiscussions.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
 import Discussion from "./pages/Discussion.jsx";
+import CreatedDiscussions from "./pages/CreatedDiscussions.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -25,14 +26,17 @@ export const App = () => {
 
     { path: "/resources", element: <Resources /> },
     { path: "resources/saved_resources", element: <SavedResources /> },
-    { path: "saved_discussions", element: <SavedDiscussions /> },
+    { path: "/saved_discussions", element: <SavedDiscussions /> },
     { path: "/user_profile", element: <UserProfile /> },
     { path: "/sign_up", element: <Signup /> },
     { path: "/login", element: <Login /> },
     { path: "/Home", element: <Home /> },
     { path: "/create_discussion", element: <CreateDiscussion /> },
+    { path: "/edit_discussion/:id", element: <CreateDiscussion /> },
+    { path: "/created_discussions", element: <CreatedDiscussions /> },
+
     { path: "/discussions", element: <Discussions /> },
-    { path: "/discussion", element: <Discussion /> },
+    { path: "/discussions/:id", element: <Discussion /> },
   ]);
   return (
     <>

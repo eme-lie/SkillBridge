@@ -4,17 +4,27 @@ import validator from "validator";
 
 const userSchema = new mongoose.Schema(
   {
+    displayName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    userType: { type: String, required: true },
+    //userType: { type: String, required: true },
     password: { type: String, required: true },
-    isAdmin: { type: Boolean, required: true, default: false },
+    //isAdmin: { type: Boolean, required: true, default: false },
+    upvotedDiscussions: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Discussion" },
+    ],
+    savedDiscussions: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Discussion" },
+    ],
+    createdDiscussions: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Discussion" },
+    ],
   },
   { timestamps: true }
 );
 
 //static signup method
-userSchema.statics.signup = async function (email, userType, password) {
-  if (!email || !userType || !password) {
+userSchema.statics.signup = async function (displayName, email, password) {
+  if (!displayName || !email || !password) {
     throw new Error("Please fill in all fields");
   }
   if (!validator.isEmail(email)) {
@@ -33,9 +43,9 @@ userSchema.statics.signup = async function (email, userType, password) {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const user = await this.create({
+    displayName,
     email,
     password: hashedPassword,
-    userType,
   });
 
   return user;

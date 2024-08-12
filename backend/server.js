@@ -4,6 +4,7 @@ import cors from "cors";
 import movieRoutes from "./routers/movieRouter.js";
 import filterRoutes from "./routers/filterRouter.js";
 import userRoutes from "./routers/userRouter.js";
+import discussionRoutes from "./routers/discussionRouter.js";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -26,7 +27,7 @@ app.use("/api/internships", internshipRoutes);
 app.use("/api/movies", movieRoutes);
 app.use("/api/filters", filterRoutes);
 app.use("/api/user", userRoutes);
-
+app.use("/api/discussions", discussionRoutes);
 app.listen(port, () => {
   console.log(`listening at ${port}`);
 });

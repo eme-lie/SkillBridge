@@ -10,22 +10,70 @@ import {
   /*BookmarkCheck,*/
 } from "lucide-react";
 import DiscussionsGuidelines from "@/components/DiscussionsGuidelines";
-
-const tags = ["Leadership", "Communication"];
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuthContext } from "../hooks/authHook";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const CreateDiscussion = () => {
-  const formSchema = z.object({
-    title: z
-      .string()
-      .min(1, { message: "title is required" })
-      .max(100, { message: "title is too long" }),
-    description: z
-      .string()
-      .min(8, { message: "description must be at least 8 characters" }),
-    tag: z.enum(tags, {
-      message: "tag is required",
-    }),
-  });
+  const { id } = useParams();
+  useEffect(() => {
+    const fetchDiscussion = async () => {
+      if (id) {
+        const { data } = await axios.get(`/api/discussions/${id}`);
+        console.log(data);
+        // Set form values to the discussion data
+        form.setValue("title", data.title);
+        form.setValue("description", data.description);
+        form.setValue("tag", data.tag);
+      }
+    };
+    fetchDiscussion();
+  }, []);
+
+  const navigate = useNavigate();
+  const [tags, setTags] = useState([]);
+  const [formSchema, setFormSchema] = useState(
+    z.object({
+      title: z
+        .string()
+        .min(1, { message: "title is required" })
+        .max(100, { message: "title is too long" }),
+      description: z
+        .string()
+        .min(20, { message: "description must be at least 20 characters" }),
+      tag: z.string(), // placeholder
+    })
+  );
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      const { data } = await axios.get("/api/filters/tags");
+      console.log(data);
+      setTags(data);
+
+      setFormSchema(
+        z.object({
+          title: z
+            .string()
+            .min(1, { message: "title is required" })
+            .max(100, { message: "title is too long" }),
+          description: z
+            .string()
+            .min(8, { message: "description must be at least 8 characters" }),
+          tag: z.enum(
+            data.map((tag) => tag.name),
+            {
+              message: "tag is required",
+            }
+          ),
+        })
+      );
+    };
+
+    fetchTags();
+  }, []);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -37,8 +85,58 @@ const CreateDiscussion = () => {
     //setError,
     formState: { errors, isSubmitting },
   } = form;
+  const {
+    state: { user },
+  } = useAuthContext();
 
-  const onSubmit = () => {};
+  const onSubmit = async (data) => {
+    // Add user ID to the data object
+    const requestData = {
+      ...data,
+      user: user.id,
+      userDisplayName: user.userDisplayName,
+    };
+
+    try {
+      if (id) {
+        const response = await axios.put(
+          `/api/discussions/edit_discussion/${id}`,
+          requestData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response) {
+          console.log(response.error);
+        } else {
+          console.log(response.data);
+          navigate("/discussions");
+        }
+        return;
+      }
+      const response = await axios.post("/api/discussions", requestData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response) {
+        console.log(response.error);
+      } else {
+        console.log(response.data);
+        navigate("/discussions");
+      }
+    } catch (error) {
+      console.error("Error creating discussion:", error);
+    }
+  };
+
+  if (!tags) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="flex flex-col">
@@ -47,10 +145,13 @@ const CreateDiscussion = () => {
         <Sidenavbar />
         <div className="right-container flex flex-col flex-1 px-4 py-4">
           <div className="top flex flex-col h-16 gap-y-4 py-8 border-b border-b-border_light flex-1">
-            <div className="top-top flex gap-x-2 items-center">
-              <ChevronLeft size={14} />
-              <p className="text-sb1">Discussions</p>
-            </div>
+            <Link to="/discussions">
+              <div className="top-top flex gap-x-2 items-center">
+                <ChevronLeft size={14} />
+                <p className="text-sb1">Discussions</p>
+              </div>
+            </Link>
+
             <h1 className="text-h2">Create New Discussion</h1>
           </div>
           <div className="bottom flex flex-col lg:flex-row py-8 gap-x-8 gap-y-8">
@@ -64,12 +165,12 @@ const CreateDiscussion = () => {
                   <div className="title-input-and-error flex flex-col flex-1 gap-y-2">
                     <div className="label-and-sub-label flex flex-col gap-y-1">
                       <label className="text-t1">Title</label>
-                      <div className="flex justify-between">
-                        <p className="text-sb1">
+                      <div className="flex justify-between gap-x-4">
+                        <p className="text-sb1 max-w-6xl">
                           What’s your discussion topic? Be specific and imagine
                           you’re speaking with another person.
                         </p>
-                        <p className="text-sb1">0 / 130 characters</p>
+                        <p className="text-sb1 w-56">0 / 130 characters</p>
                       </div>
                     </div>
                     <input
@@ -100,10 +201,9 @@ const CreateDiscussion = () => {
                         errors.tag ? "error-class border-destructive" : ""
                       }`}
                     >
-                      <option value="">Select tag</option>
                       {tags.map((tag) => (
-                        <option key={tag} value={tag}>
-                          {tag}
+                        <option key={tag._id} value={tag.name}>
+                          {tag.name}
                         </option>
                       ))}
                     </select>
@@ -117,18 +217,18 @@ const CreateDiscussion = () => {
 
                   <div className="input-and-error flex flex-col gap-y-1">
                     <label className="text-t1">Description</label>
-                    <input
+                    <textarea
                       {...register("description")}
-                      type="description"
+                      type="text"
                       placeholder="Description"
-                      className={`description-input h-8 w-full rounded border  border-solid focus:border-primary_light text-sb1 pl-4 placeholder:text-sb1 ${
+                      className={`description-input h-32 w-full rounded border focus:outline pl-4 pt-2 placeholder-gray-500 placeholder-opacity-75 ${
                         errors.description
                           ? "error-class border-destructive"
                           : ""
                       }`}
                     />
                     {errors.description && (
-                      <p className="error-response text-destructive_light text-b4">
+                      <p className="error-response text-b4 text-destructive_light">
                         {errors.description.message}
                       </p>
                     )}
@@ -144,7 +244,7 @@ const CreateDiscussion = () => {
                       : "bg-primary_light w-fit text-text_light pt-3 pr-4 pb-3 pl-4 md:pt-4 md:pr-6 md:pb-4 md:pl-6 rounded font-medium text-sm md:text-lg"
                   }`}
                 >
-                  Post Discussion
+                  {id ? "Edit Discussion" : "Create Discussion"}
                 </Button>
 
                 {/* Render general error message */}

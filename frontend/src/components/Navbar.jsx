@@ -13,6 +13,7 @@ import {
 
   /*BookmarkCheck,*/
 } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
@@ -25,6 +26,8 @@ import { useLogout } from "@/hooks/useLogout";
 import { useAuthContext } from "../hooks/authHook";
 
 const Navbar = () => {
+  const location = useLocation();
+  const pathname = location.pathname;
   const navigate = useNavigate();
   const { logout } = useLogout();
   const {
@@ -38,11 +41,11 @@ const Navbar = () => {
   //const pathSegment = location.pathname.split("/")[1]; // Gets the first segment of the path
   //const pathSegment2 = location.pathname.split("/")[2]; // Gets the second segment of the path
   return (
-    <div className="navbar nav-top flex flex-row pt-4 pr-6 pl-6 pb-4 md:pt-8 md:pr-16 md:pl-16 md:pb-8 lg:gap-y-4 shadow-custom1 justify-between">
+    <div className="navbar nav-top flex flex-row pt-4 pr-6 pl-6 pb-4 md:pt-8 md:pr-16 md:pl-16 md:pb-8 lg:gap-y-4 shadow-custom1 justify-between items-center">
       <div className="nav-top-left-side flex items-center gap-x-4">
         <Sheet className="bg-background_light flex flex-col h-full">
           <SheetTrigger>
-            <Menu className="icon_light w-8 flex lg:hidden" />
+            <Menu className="icon_light w-8 flex md:hidden" />
           </SheetTrigger>
           <SheetContent
             side="left"
@@ -57,34 +60,64 @@ const Navbar = () => {
                     className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
                   >
                     <MessagesSquare
-                      className="icon transition-colors duration-200"
+                      className={`icon transition-colors duration-200 ${
+                        pathname === "/discussions"
+                          ? "text-primary_light"
+                          : "text-light"
+                      } hover:text-primary_light`}
                       size={16}
                     />
-                    <span className="text-b4 transition-colors duration-200 group-hover:text-primary_light ">
+                    <span
+                      className={`icon transition-colors duration-200 ${
+                        pathname === "/discussions"
+                          ? "text-primary_light"
+                          : "text-light"
+                      } hover:text-primary_light`}
+                    >
                       All Discussions
                     </span>
                   </Link>
                   <Link
-                    to="/discussions"
+                    to="/created_discussions"
                     className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
                   >
                     <MessageSquareShare
-                      className="icon transition-colors duration-200"
+                      className={`icon transition-colors duration-200 ${
+                        pathname === "/created_discussions"
+                          ? "text-primary_light"
+                          : "text-light"
+                      } hover:text-primary_light`}
                       size={16}
                     />
-                    <span className="text-b4 transition-colors duration-200 group-hover:text-primary_light ">
+                    <span
+                      className={`icon transition-colors duration-200 ${
+                        pathname === "/created_discussions"
+                          ? "text-primary_light"
+                          : "text-light"
+                      } hover:text-primary_light`}
+                    >
                       My Posts
                     </span>
                   </Link>
                   <Link
-                    to="/discussions"
+                    to="/saved_discussions"
                     className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
                   >
                     <Bookmark
-                      className="icon transition-colors duration-200"
+                      className={`icon transition-colors duration-200 ${
+                        pathname === "/saved_discussions"
+                          ? "text-primary_light"
+                          : "text-light"
+                      } hover:text-primary_light`}
                       size={16}
                     />
-                    <span className="text-b4 transition-colors duration-200 group-hover:text-primary_light">
+                    <span
+                      className={`icon transition-colors duration-200 ${
+                        pathname === "/saved_discussions"
+                          ? "text-primary_light"
+                          : "text-light"
+                      } hover:text-primary_light`}
+                    >
                       Saves
                     </span>
                   </Link>
@@ -108,18 +141,22 @@ const Navbar = () => {
           </SheetContent>
         </Sheet>
 
+        <Link to="/discussions">
+          <img
+            src="\images\SkillBridge.svg"
+            alt=""
+            className="w-24 hidden md:block cursor-pointer"
+          />
+        </Link>
+      </div>
+
+      <Link to="/discussions">
         <img
           src="\images\SkillBridge.svg"
           alt=""
-          className="w-24 hidden lg:block"
+          className="w-24 block md:hidden cursor-pointer"
         />
-      </div>
-
-      <img
-        src="\images\SkillBridge.svg"
-        alt=""
-        className="w-24 block lg:hidden"
-      />
+      </Link>
 
       <div className="nav-top-right-side flex flex-row items-center gap-x-8 ">
         {!user && (
@@ -143,7 +180,7 @@ const Navbar = () => {
               </Avatar>
             </PopoverTrigger>
             <PopoverContent className="bg-background_light">
-              <div className="popup-list flex flex-col gap-y-4 bg-background_light">
+              <div className="popup-list flex flex-col gap-y-4 bg-background_light cursor-pointer">
                 <Link
                   to="/discussions"
                   className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light"
@@ -157,7 +194,7 @@ const Navbar = () => {
                   </span>
                 </Link>
 
-                <div className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light">
+                <div className="side-nav-item flex flex-row gap-x-2 items-center hover:text-primary_light cursor-pointer">
                   <LogOut
                     className="icon transition-colors duration-200"
                     size={16}

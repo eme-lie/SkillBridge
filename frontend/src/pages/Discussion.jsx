@@ -2,10 +2,172 @@ import DiscussionsGuidelines from "@/components/DiscussionsGuidelines";
 import Sidenavbar from "@/components/Sidenavbar";
 import Navbar from "../components/Navbar";
 import { Button } from "@/components/ui/button";
-import { CircleChevronUp } from "lucide-react";
+import { CircleChevronUp, Reply, Bookmark, CircleEllipsis } from "lucide-react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useAuthContext } from "../hooks/authHook";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover.jsx";
+
+import { formatDistanceToNow, format } from "date-fns";
+
+const schema = z.object({
+  reply: z.string().min(1, { message: "Input cannot be empty" }),
+});
 
 const Discussion = () => {
-  const errors = {};
+  const {
+    state: { user },
+  } = useAuthContext();
+
+  const { id } = useParams();
+  const userId = user?.id;
+  const userDisplayName = user?.userDisplayName;
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({ resolver: zodResolver(schema) });
+  const onSubmit = async (data) => {
+    try {
+      console.log("Submitting reply:", data);
+      await axios.put(`/api/discussions/${id}/reply`, {
+        data,
+        userId,
+        userDisplayName,
+      });
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError("_general", {
+          type: "manual",
+          message: error.response.data.message,
+        });
+      } else if (error.request) {
+        setError("_general", {
+          type: "manual",
+          message: "No response from the server",
+        });
+      } else {
+        setError("_general", {
+          type: "manual",
+          message: error.message,
+        });
+      }
+    }
+  };
+
+  const [discussion, setDiscussion] = useState(null);
+  const [upvoted, setUpvoted] = useState(false);
+  const [savedDiscussion, setSavedDiscussion] = useState(false);
+
+  const saveDiscussion = async () => {
+    try {
+      console.log("Saving discussion ID:", id);
+      console.log("User ID:", userId);
+
+      const { data } = await axios.put(`/api/user/save_discussion/${id}`, {
+        userId,
+      });
+      console.log("Saved discussion:", data);
+      setDiscussion(data);
+    } catch (error) {
+      console.error("Error saving discussion:", error);
+    }
+  };
+
+  const upVoteDiscussion = async () => {
+    try {
+      console.log("Upvoting discussion ID:", id);
+      console.log("User ID:", userId);
+
+      const { data } = await axios.put(`/api/discussions/upvote/${id}`, {
+        userId,
+      });
+
+      console.log("Upvoted discussion:", data);
+    } catch (error) {
+      console.error("Error upvoting discussion:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("Fetching data for discussion ID:", id);
+        const { data } = await axios.get(`/api/discussions/${id}`);
+
+        console.log("Fetched data:", data);
+        setDiscussion(data);
+      } catch (error) {
+        console.error("Error fetching discussion:", error);
+      }
+    };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    const checkSavedDiscussion = async () => {
+      try {
+        console.log("Checking saved status for discussion ID:", id);
+        console.log("User ID:", userId);
+
+        const { data } = await axios.get(
+          `/api/user/check_saved_discussions/${id}`,
+          {
+            params: { userId },
+          }
+        );
+
+        console.log("Checked saved status:", data);
+        setSavedDiscussion(data.userHasSavedDiscussion);
+      } catch (error) {
+        console.error("Error checking saved status:", error);
+      }
+    };
+    checkSavedDiscussion();
+  }, []);
+
+  {
+    useEffect(() => {
+      if (discussion) {
+        const checkUpvote = async () => {
+          try {
+            console.log("Checking upvote status for discussion ID:", id);
+            console.log("User ID:", userId);
+
+            const { data } = await axios.get(
+              `/api/discussions/check_upvote/${id}`,
+              {
+                userId,
+              }
+            );
+            console.log("Checked upvote status:", data);
+            setUpvoted(data.userHasUpvoted);
+          } catch (error) {
+            console.error("Error checking upvote status:", error);
+          }
+        };
+        checkUpvote();
+      }
+    }, [discussion, id, userId]);
+  }
+
+  if (!discussion) {
+    return <div>Loading...</div>; // Or any loading indicator
+  }
+
+  //const errors = {};
   return (
     <div className="flex flex-col">
       <Navbar />
@@ -18,88 +180,104 @@ const Discussion = () => {
               <div className="other-details flex gap-x-4">
                 <div className="other-detail flex gap-x-1">
                   <p className="text-sb1">Created</p>
-                  <p className="text-sb2">14 days ago</p>
+                  <p className="text-sb2">
+                    {formatDistanceToNow(new Date(discussion.createdAt), {
+                      addSuffix: true,
+                    })}
+                  </p>
                 </div>
                 <div className="other-detail flex gap-x-1">
-                  <p className="text-sb1">7</p>
-                  <p className="text-sb2">replies</p>
+                  <p className="text-sb1">{discussion.replies.length}</p>
+                  <p className="text-sb2">
+                    {discussion.replies.length === 1 ? "reply" : "replies"}
+                  </p>
                 </div>
               </div>
             </div>
 
-            <Button
-              className="border border-primary_light text-primary_light rounded-lg w-fit px-6 py-2 text-sm font-medium "
-              onClick={() => console.log("clicked")}
-            >
-              Start Discussion
-            </Button>
+            <Link to="/create_discussion">
+              <Button className="border border-primary_light text-primary_light rounded-lg w-fit px-6 py-2 text-sm font-medium ">
+                Start Discussion
+              </Button>
+            </Link>
           </div>
 
           <div className="bottom flex flex-col lg:flex-row py-8 gap-x-8 gap-y-8">
             <div className="bottom-left flex flex-col flex-1 gap-y-12 ">
-              <div className="bottom-left-1 flex">
-                <div className="discussion-card flex pl-8 pb-3 pr-3 gap-x-4 border-b">
-                  <div className="votes-div flex flex-col gap-y-2 items-center">
-                    <CircleChevronUp size={32} className="-mt-1" />
-                    <p className="text-b3">10</p>
+              <div className="bottom-left-1 flex flex-1">
+                <div className="discussion-card flex flex-1 pl-8 pb-3 pr-3 gap-x-4 border-b">
+                  <div className="votes-save-div flex flex-col gap-y-2 items-center">
+                    <div className="votes-save-div flex flex-col gap-y-2 items-center">
+                      <CircleChevronUp
+                        size={28}
+                        className="-mt-1"
+                        onClick={upVoteDiscussion}
+                        color={upvoted ? "#57A2FF" : "#191A23"}
+                      />
+                      <p className="text-b3">{discussion.upvotes.length}</p>
+                    </div>
+                    <Bookmark
+                      size={28}
+                      onClick={saveDiscussion}
+                      color={savedDiscussion ? "#57A2FF" : "#191A23"}
+                    />
                   </div>
 
-                  <div className="discussion-card-right flex flex-col gap-y-2">
+                  <div className="discussion-card-right flex flex-col flex-1 gap-y-2">
                     <div className="title-and-sub flex flex-col gap-y-1">
-                      <h5 className="text-t3">
-                        Best programming languages to learn for developing a web
-                        server?
-                      </h5>
-                      <p className="text-b4">
-                        Hi , im a beginner in this world of the programming and
-                        i would like that give some advice to begin in this
-                        world. Sorry for my english
-                      </p>
+                      <h5 className="text-t3">{discussion.title}</h5>
+                      <p className="text-b4">{discussion.description}</p>
                     </div>
                     <div className="other-details flex justify-between items-center">
                       <p className="tag py-1 px-3 bg-background_alt_light text-b3">
-                        0
+                        {discussion.tag}
                       </p>
-                      <div className="other-details-right flex gap-x-4">
-                        <div className="other-details-right-left flex gap-x-1">
-                          <p className="text-b3">11</p>
-                          <p className="text-b5">replied</p>
-                        </div>
-                        <p className="text-b5">1 hour ago</p>
-                      </div>
+                      {discussion.user === userId && (
+                        <Popover className="">
+                          <PopoverTrigger>
+                            <CircleEllipsis size={16} />
+                          </PopoverTrigger>
+                          <PopoverContent className="bg-background_light w-54">
+                            <div className="popup-list flex flex-col gap-y-4 bg-background_light">
+                              <Link to={`/edit_discussion/${discussion._id}`}>
+                                <p className="text-b4 cursor-pointer">Edit</p>
+                              </Link>
+                              <p className="text-b4 cursor-pointer">Delete</p>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
               <div className="bottom-left-2 flex-1">
                 <form
-                  //onSubmit={handleSubmit(onSubmit)}
+                  onSubmit={handleSubmit(onSubmit)}
                   noValidate
                   className="bg-Neutral400 w-full flex flex-col rounded gap-y-4 border border-rounded border-border_light p-4"
                 >
                   <textarea
-                    //{...register("email")}
+                    {...register("reply")}
                     type="text"
                     placeholder="Add to the discussion"
                     className={`textarea-input h-32 w-full rounded border focus:outline pl-4 pt-2 placeholder-gray-500 placeholder-opacity-75 ${
-                      errors.textarea ? "error-class border-destructive" : ""
+                      errors.reply ? "error-class border-destructive" : ""
                     }`}
                   />
                   {errors.textarea && (
                     <p className="error-response text-b4 text-destructive_light">
-                      {errors.textarea.message}
+                      {errors.reply.message}
                     </p>
                   )}
                   <Button
                     type="submit"
-                    className="bg-primary_light text-text_dark flex w-fit"
-                    //disabled={isSubmitting}
-
-                    /*className={`button-class ${
-                    isSubmitting
-                      ? "bg-primary_light bg-opacity-70 w-fit text-text_light pt-4 pr-6 pb-4 pl-6 rounded text-lg font-medium"
-                      : "bg-primary_light w-fit text-text_light pt-3 pr-4 pb-3 pl-4 md:pt-4 md:pr-6 md:pb-4 md:pl-6 rounded font-medium text-sm md:text-lg"
-                  }`}*/
+                    disabled={isSubmitting}
+                    className={`button-class ${
+                      isSubmitting
+                        ? "bg-primary_light bg-opacity-70 w-fit text-text_light pt-4 pr-6 pb-4 pl-6 rounded text-lg font-medium"
+                        : "bg-primary_light w-fit text-text_light pt-3 pr-4 pb-3 pl-4 md:pt-4 md:pr-6 md:pb-4 md:pl-6 rounded font-medium text-sm md:text-lg"
+                    }`}
                   >
                     Reply
                   </Button>
@@ -113,7 +291,13 @@ const Discussion = () => {
               </div>
               <div className="bottom-left-3 flex flex-col flex-1 gap-y-3">
                 <div className="bottom-left-top flex items-center justify-between ">
-                  <p className="text-t1">26 Replies</p>
+                  <div className="flex gap-x-2">
+                    <p className="text-t1">{discussion.replies.length}</p>
+                    <p className="text-t1">
+                      {discussion.replies.length === 1 ? "reply" : "replies"}
+                    </p>
+                  </div>
+
                   <div className="sort flex gap-x-2 items-center">
                     <p className="text-b5 text-text_light">Sort by:</p>
 
@@ -149,33 +333,55 @@ const Discussion = () => {
                     </select>
                   </div>
                 </div>
-                <div className="reply-card flex pb-3 pr-3 gap-x-4 border-b">
-                  <div className="votes-div flex flex-col gap-y-2 items-center">
-                    <CircleChevronUp size={32} className="-mt-1" />
-                    <p className="text-b3">10</p>
-                  </div>
-
-                  <div className="reply-card-right flex flex-col gap-y-2">
-                    <div className="top-details flex justify-between items-center">
-                      <div className="flex gap-x-2 items-center">
-                        <div className="h-6 w-6 bg-background_alt_light rounded"></div>
-                        <p className="text-sb1">Emelie Obiora</p>
+                <div className="reply-card flex flex-1 pb-3 pr-3 gap-x-4 border-b">
+                  <div className="flex flex-col flex-1 gap-y-2">
+                    {discussion.replies.map((reply) => (
+                      <div
+                        className="reply-card flex flex-1 pb-3 pr-3 gap-x-4 border-b"
+                        key={reply._id}
+                      >
+                        <div className="votes-div flex flex-col gap-y-2 items-center">
+                          <CircleChevronUp size={32} className="-mt-1" />
+                          <p className="text-b3">
+                            {reply.upvotes.length === 0
+                              ? 0
+                              : reply.upvotes.length}
+                          </p>
+                        </div>
+                        <div
+                          className="reply-card-right flex flex-col gap-y-2"
+                          key={reply._id}
+                        >
+                          <div className="top-details flex justify-between items-center">
+                            <div className="flex gap-x-2 items-center">
+                              <div className="h-6 w-6 bg-background_alt_light rounded"></div>
+                              <p className="text-sb1">
+                                {reply.userDisplayName}
+                              </p>
+                            </div>
+                          </div>
+                          <p className="text-b4">{reply.content}</p>
+                          <div className="bottom-details flex items-center gap-x-6">
+                            <p className="text-b5">
+                              {format(
+                                new Date(reply.createdAt),
+                                "MMMM d 'at' HH:mm"
+                              )}
+                            </p>
+                            <div className="flex gap-x-1 items-center">
+                              <Reply size={16} />
+                              <p className="text-sb1">Reply</p>
+                            </div>
+                          </div>
+                          {reply.replies.length > 0 &&
+                            reply.replies.map((reply) => (
+                              <div className="" key={reply._id}>
+                                <p className="text-b4">{reply.content}</p>
+                              </div>
+                            ))}
+                        </div>
                       </div>
-                    </div>
-                    <div className="title-and-sub flex flex-col gap-y-1">
-                      <h5 className="text-t3">
-                        Best programming languages to learn for developing a web
-                        server?
-                      </h5>
-                      <p className="text-b4">
-                        Hi , im a beginner in this world of the programming and
-                        i would like that give some advice to begin in this
-                        world. Sorry for my english
-                      </p>
-                    </div>
-                    <div className="bottom-details flex items-center">
-                      <p className="text-b5">August 7 at 11:15</p>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
