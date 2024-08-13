@@ -29,7 +29,7 @@ export const App = () => {
     { path: "/saved_discussions", element: <SavedDiscussions /> },
     { path: "/user_profile", element: <UserProfile /> },
     { path: "/sign_up", element: <Signup /> },
-    { path: "/login", element: <Login /> },
+    { path: "/", element: <Login /> },
     { path: "/Home", element: <Home /> },
     { path: "/create_discussion", element: <CreateDiscussion /> },
     { path: "/edit_discussion/:id", element: <CreateDiscussion /> },
