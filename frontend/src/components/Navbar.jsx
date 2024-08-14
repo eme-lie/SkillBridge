@@ -35,7 +35,7 @@ const Navbar = () => {
   } = useAuthContext();
   const handleLogout = async () => {
     await logout();
-    navigate("/login");
+    navigate("/");
   };
   //const location = useLocation();
   //const pathSegment = location.pathname.split("/")[1]; // Gets the first segment of the path
@@ -124,7 +124,7 @@ const Navbar = () => {
                 </div>
                 {!user && (
                   <div className=" side-nav-bottom flex flex-col gap-y-2 py-12 pr-8 border-r ">
-                    <Link to="/login">
+                    <Link to="/">
                       <Button className="w-full border border-rounded border-lg">
                         Login
                       </Button>
@@ -161,7 +161,7 @@ const Navbar = () => {
       <div className="nav-top-right-side flex flex-row items-center gap-x-8 ">
         {!user && (
           <div className=" flex gap-x-4 ">
-            <Link to="/login">
+            <Link to="/">
               <Button className="w-full border border-rounded border-lg">
                 Login
               </Button>

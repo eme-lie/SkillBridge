@@ -31,6 +31,7 @@ const Discussion = () => {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm({ resolver: zodResolver(schema) });
   const onSubmit = async (data) => {
     try {
@@ -40,6 +41,7 @@ const Discussion = () => {
         userId,
         userDisplayName,
       });
+      reset();
     } catch (error) {
       if (
         error.response &&
@@ -259,7 +261,7 @@ const Discussion = () => {
                 >
                   <textarea
                     {...register("reply")}
-                    type="text"
+                    type="reply"
                     placeholder="Add to the discussion"
                     className={`textarea-input h-32 w-full rounded border focus:outline pl-4 pt-2 placeholder-gray-500 placeholder-opacity-75 ${
                       errors.reply ? "error-class border-destructive" : ""
