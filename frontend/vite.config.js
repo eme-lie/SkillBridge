@@ -12,6 +12,11 @@ console.log("Resolved __dirname:", __dirname);
 console.log('Resolved path for "@":', path.resolve(__dirname, "./src"));
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      external: ["date-fns"],
+    },
+  },
   plugins: [react()],
   resolve: {
     alias: {
