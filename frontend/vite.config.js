@@ -14,7 +14,7 @@ console.log('Resolved path for "@":', path.resolve(__dirname, "./src"));
 export default defineConfig({
   build: {
     rollupOptions: {
-      external: ["date-fns"],
+      //external: ["date-fns"],
     },
   },
   plugins: [react()],
