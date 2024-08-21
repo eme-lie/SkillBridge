@@ -13,8 +13,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar.jsx";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import axios from "axios";
 import { formatDistanceToNow } from "date-fns";
+import axiosInstance from "../axiosInstance";
 
 const Discussions = () => {
   const [tags, setTags] = useState([]);
@@ -32,7 +32,7 @@ const Discussions = () => {
 
   useEffect(() => {
     const fetchTags = async () => {
-      const { data } = await axios.get("/api/filters/tags");
+      const { data } = await axiosInstance.get("/api/filters/tags");
       console.log(data);
       setTags(data);
     };
@@ -52,7 +52,7 @@ const Discussions = () => {
 
       setSearchParams(queryParams); // Update the URL search parameters
 
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `/api/discussions?${queryParams.toString()}`
       );
 
@@ -157,21 +157,25 @@ const Discussions = () => {
                       </PopoverTrigger>
                       <PopoverContent className="bg-background_light flex flex-col h-full">
                         <div className="flex flex-col h-24 overflow-y-auto scrollbar-hide gap-y-1">
-                          {tags.map((tag) => (
-                            <span
-                              className={`cursor-pointer ${
-                                tag === tag.name
-                                  ? "text-primary_light"
-                                  : "text-text_light"
-                              } mx-2.5`}
-                              key={tag._id}
-                              onClick={() =>
-                                handleFilterToggle("tag", tag.name)
-                              }
-                            >
-                              {tag.name}
-                            </span>
-                          ))}
+                          {Array.isArray(tags) ? (
+                            tags.map((tag) => (
+                              <span
+                                className={`cursor-pointer ${
+                                  tag === tag.name
+                                    ? "text-primary_light"
+                                    : "text-text_light"
+                                } mx-2.5`}
+                                key={tag._id}
+                                onClick={() =>
+                                  handleFilterToggle("tag", tag.name)
+                                }
+                              >
+                                {tag.name}
+                              </span>
+                            ))
+                          ) : (
+                            <span>Tags loading</span>
+                          )}
                         </div>
                       </PopoverContent>
                     </Popover>
@@ -192,66 +196,69 @@ const Discussions = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <div className="bottom-left-center flex flex-col mt-4 ">
-                {discussions.map((discussion) => (
-                  <div
-                    key={discussion.id}
-                    className="discussion-card flex pl-1 pt-2 pb-2 pr-2 gap-x-3 lg:pl-8 lg:pt-3 lg:pb-3 lg:pr-3 gap-x-6 border-b"
-                  >
-                    <div className="discussion-card-left flex flex-col gap-y-2">
-                      <div className="votes-container flex gap-x-1 items-center">
-                        <p className="text-b3">{discussion.upvotes.length}</p>
-                        <p className="text-b4">
-                          {discussion.upvotes.length === 1 ? "vote" : "votes"}
-                        </p>
+                {Array.isArray(discussions) ? (
+                  discussions.map((discussion) => (
+                    <div
+                      key={discussion.id}
+                      className="discussion-card flex pl-1 pt-2 pb-2 pr-2 gap-x-3 lg:pl-8 lg:pt-3 lg:pb-3 lg:pr-3 gap-x-6 border-b"
+                    >
+                      <div className="discussion-card-left flex flex-col gap-y-2">
+                        <div className="votes-container flex gap-x-1 items-center">
+                          <p className="text-b3">{discussion.upvotes.length}</p>
+                          <p className="text-b4">
+                            {discussion.upvotes.length === 1 ? "vote" : "votes"}
+                          </p>
+                        </div>
+                        <div className="replies-container flex gap-x-1 items-center">
+                          <p className="text-b3">{discussion.replies.length}</p>
+                          <p className="text-b4">
+                            {discussion.replies.length === 1
+                              ? "reply"
+                              : "replies"}
+                          </p>
+                        </div>
                       </div>
-                      <div className="replies-container flex gap-x-1 items-center">
-                        <p className="text-b3">{discussion.replies.length}</p>
-
-                        <p className="text-b4">
-                          {discussion.replies.length === 1
-                            ? "reply"
-                            : "replies"}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="discussion-card-right flex flex-1 flex-col gap-y-2">
-                      <div className="title-and-sub flex flex-col gap-y-1">
-                        <Link to={`/discussions/${discussion._id}`}>
-                          <h5 className="text-t3 hover:text-primary_light">
-                            {discussion.title}
-                          </h5>
-                        </Link>
-
-                        <p className="text-b4">{discussion.description}</p>
-                      </div>
-                      <div className="other-details flex sm: flex-col md:flex-row justify-between md:items-center gap-y-2">
-                        <p className="tag py-1 px-1 lg:px-3 bg-background_alt_light text-b3 w-fit">
-                          {discussion.tag}
-                        </p>
-                        <div className="other-details-right flex flex-row gap-x-4">
-                          <div className="other-details-right-1 flex gap-x-1 items-center">
-                            <Avatar className="h-4 w-4">
-                              <AvatarImage src="https://github.com/shadcn.png" />
-                              <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                            <p className="text-sb1">
-                              {discussion.userDisplayName}
-                            </p>
-                          </div>
-
-                          <div className="other-details-right-2 flex gap-x-1">
-                            <p className="text-sb1">
-                              {formatDistanceToNow(
-                                new Date(discussion.createdAt),
-                                { addSuffix: true }
-                              )}
-                            </p>
+                      <div className="discussion-card-right flex flex-1 flex-col gap-y-2">
+                        <div className="title-and-sub flex flex-col gap-y-1">
+                          <Link to={`/discussions/${discussion._id}`}>
+                            <h5 className="text-t3 hover:text-primary_light">
+                              {discussion.title}
+                            </h5>
+                          </Link>
+                          <p className="text-b4">{discussion.description}</p>
+                        </div>
+                        <div className="other-details flex sm: flex-col md:flex-row justify-between md:items-center gap-y-2">
+                          <p className="tag py-1 px-1 lg:px-3 bg-background_alt_light text-b3 w-fit">
+                            {discussion.tag}
+                          </p>
+                          <div className="other-details-right flex flex-row gap-x-4">
+                            <div className="other-details-right-1 flex gap-x-1 items-center">
+                              <Avatar className="h-4 w-4">
+                                <AvatarImage src="https://github.com/shadcn.png" />
+                                <AvatarFallback>CN</AvatarFallback>
+                              </Avatar>
+                              <p className="text-sb1">
+                                {discussion.userDisplayName}
+                              </p>
+                            </div>
+                            <div className="other-details-right-2 flex gap-x-1">
+                              <p className="text-sb1">
+                                {formatDistanceToNow(
+                                  new Date(discussion.createdAt),
+                                  {
+                                    addSuffix: true,
+                                  }
+                                )}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <span>Discussions loading</span>
+                )}
               </div>
               <div className="bottom-left-bottom flex justify-center gap-x-6">
                 <div

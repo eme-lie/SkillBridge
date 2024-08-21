@@ -1,12 +1,14 @@
 import { useAuthContext } from "./authHook.js";
-import axios from "axios";
+import axiosInstance from "../axiosInstance";
 
+//const apiUrl = import.meta.env.VITE_BASE_URL;
 export const useLogin = () => {
   const { dispatch } = useAuthContext();
 
   const login = async ({ email, password }) => {
     try {
-      const response = await axios.post("/api/user/login", {
+      //console.log(apiUrl);
+      const response = await axiosInstance.post(`/api/user/login`, {
         email,
         password,
       });

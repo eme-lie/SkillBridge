@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import DiscussionsGuidelines from "@/components/DiscussionsGuidelines";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../axiosInstance";
 import { useAuthContext } from "../hooks/authHook";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -21,7 +21,7 @@ const CreateDiscussion = () => {
   useEffect(() => {
     const fetchDiscussion = async () => {
       if (id) {
-        const { data } = await axios.get(`/api/discussions/${id}`);
+        const { data } = await axiosInstance.get(`/api/discussions/${id}`);
         console.log(data);
         // Set form values to the discussion data
         form.setValue("title", data.title);
@@ -49,7 +49,7 @@ const CreateDiscussion = () => {
 
   useEffect(() => {
     const fetchTags = async () => {
-      const { data } = await axios.get("/api/filters/tags");
+      const { data } = await axiosInstance.get("/api/filters/tags");
       console.log(data);
       setTags(data);
 
@@ -99,7 +99,7 @@ const CreateDiscussion = () => {
 
     try {
       if (id) {
-        const response = await axios.put(
+        const response = await axiosInstance.put(
           `/api/discussions/edit_discussion/${id}`,
           requestData,
           {
@@ -117,11 +117,15 @@ const CreateDiscussion = () => {
         }
         return;
       }
-      const response = await axios.post("/api/discussions", requestData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axiosInstance.post(
+        "/api/discussions",
+        requestData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response) {
         console.log(response.error);

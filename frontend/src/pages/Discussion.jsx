@@ -3,7 +3,7 @@ import Sidenavbar from "@/components/Sidenavbar";
 import Navbar from "../components/Navbar";
 import { Button } from "@/components/ui/button";
 import { CircleChevronUp, Reply, Bookmark, CircleEllipsis } from "lucide-react";
-import axios from "axios";
+import axiosInstance from "../axiosInstance";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAuthContext } from "../hooks/authHook";
@@ -36,7 +36,7 @@ const Discussion = () => {
   const onSubmit = async (data) => {
     try {
       console.log("Submitting reply:", data);
-      await axios.put(`/api/discussions/${id}/reply`, {
+      await axiosInstance.put(`/api/discussions/${id}/reply`, {
         data,
         userId,
         userDisplayName,
@@ -75,9 +75,12 @@ const Discussion = () => {
       console.log("Saving discussion ID:", id);
       console.log("User ID:", userId);
 
-      const { data } = await axios.put(`/api/user/save_discussion/${id}`, {
-        userId,
-      });
+      const { data } = await axiosInstance.put(
+        `/api/user/save_discussion/${id}`,
+        {
+          userId,
+        }
+      );
       console.log("Saved discussion:", data);
       setDiscussion(data);
     } catch (error) {
@@ -90,9 +93,12 @@ const Discussion = () => {
       console.log("Upvoting discussion ID:", id);
       console.log("User ID:", userId);
 
-      const { data } = await axios.put(`/api/discussions/upvote/${id}`, {
-        userId,
-      });
+      const { data } = await axiosInstance.put(
+        `/api/discussions/upvote/${id}`,
+        {
+          userId,
+        }
+      );
 
       console.log("Upvoted discussion:", data);
     } catch (error) {
@@ -104,7 +110,7 @@ const Discussion = () => {
     const fetchData = async () => {
       try {
         console.log("Fetching data for discussion ID:", id);
-        const { data } = await axios.get(`/api/discussions/${id}`);
+        const { data } = await axiosInstance.get(`/api/discussions/${id}`);
 
         console.log("Fetched data:", data);
         setDiscussion(data);
@@ -124,7 +130,7 @@ const Discussion = () => {
         console.log("Checking saved status for discussion ID:", id);
         console.log("User ID:", userId);
 
-        const { data } = await axios.get(
+        const { data } = await axiosInstance.get(
           `/api/user/check_saved_discussions/${id}`,
           {
             params: { userId },
@@ -148,7 +154,7 @@ const Discussion = () => {
             console.log("Checking upvote status for discussion ID:", id);
             console.log("User ID:", userId);
 
-            const { data } = await axios.get(
+            const { data } = await axiosInstance.get(
               `/api/discussions/check_upvote/${id}`,
               {
                 userId,

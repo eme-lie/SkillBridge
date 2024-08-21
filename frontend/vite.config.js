@@ -14,18 +14,13 @@ console.log('Resolved path for "@":', path.resolve(__dirname, "./src"));
 export default defineConfig({
   build: {
     rollupOptions: {
-      //external: ["date-fns"],
+      external: ["date-fns"],
     },
   },
   plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-    },
-  },
-  server: {
-    proxy: {
-      "/api": "http://localhost:4000", // replace with the port your Express server is running on
     },
   },
 });

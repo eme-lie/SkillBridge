@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidenavbar from "@/components/Sidenavbar";
-import axios from "axios";
+import axiosInstance from "../axiosInstance";
 import { useAuthContext } from "../hooks/authHook";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
@@ -13,7 +13,7 @@ const SavedDiscussions = () => {
   } = useAuthContext();
   useEffect(() => {
     const fetchSavedDiscussions = async () => {
-      const { data } = await axios.get("/api/user/saved_discussions", {
+      const { data } = await axiosInstance.get("/api/user/saved_discussions", {
         params: { userId: user.id },
       });
 

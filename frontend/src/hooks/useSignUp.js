@@ -1,12 +1,12 @@
 import { useAuthContext } from "./authHook.js";
-import axios from "axios";
+import axiosInstance from "../axiosInstance";
 
 export const useSignUp = () => {
   const { dispatch } = useAuthContext();
 
   const signUp = async ({ displayName, email, password }) => {
     try {
-      const response = await axios.post("/api/user/signup", {
+      const response = await axiosInstance.post("/api/user/signup", {
         displayName,
         email,
         password,

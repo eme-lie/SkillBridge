@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidenavbar from "@/components/Sidenavbar";
-import axios from "axios";
+import axiosInstance from "../axiosInstance";
 import { useAuthContext } from "../hooks/authHook";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
@@ -17,9 +17,12 @@ const CreatedDiscussions = () => {
   useEffect(() => {
     if (userId) {
       const fetchCreatedDiscussions = async () => {
-        const { data } = await axios.get("/api/user/created_discussions", {
-          params: { userId },
-        });
+        const { data } = await axiosInstance.get(
+          "/api/user/created_discussions",
+          {
+            params: { userId },
+          }
+        );
 
         if (userId) {
           setCreatedDiscussions(data);
