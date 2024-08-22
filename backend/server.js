@@ -1,17 +1,19 @@
 import express from "express";
-import internshipRoutes from "./routers/internshipRouter.js";
 import cors from "cors";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+import internshipRoutes from "./routers/internshipRouter.js";
 import movieRoutes from "./routers/movieRouter.js";
 import filterRoutes from "./routers/filterRouter.js";
 import userRoutes from "./routers/userRouter.js";
 import discussionRoutes from "./routers/discussionRouter.js";
 
-import dotenv from "dotenv";
+// Load environment variables
 dotenv.config();
 
-import connectDB from "./config/db.js";
-
+// Connect to MongoDB
 connectDB();
+
 const port = process.env.PORT || 5000;
 
 const app = express();
