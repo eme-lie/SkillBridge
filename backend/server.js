@@ -22,10 +22,18 @@ app.use(express.json());
 
 console.log("REACT_APP_API_BASE_URL:", process.env.REACT_APP_API_BASE_URL); // Add this line to debug
 
+// Debugging: Log each incoming request to verify CORS middleware is applied
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.path}`);
+  next();
+});
+
 app.use(
   cors({
     origin: process.env.REACT_APP_API_BASE_URL, // Use the environment variable
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders:
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
     credentials: true, // If you need to include credentials like cookies
   })
 );
