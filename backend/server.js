@@ -40,6 +40,12 @@ app.use(
   })
 );
 
+// Routes
+console.log(
+  "REACT_APP_API_BASE_URL_SECOND:",
+  process.env.REACT_APP_API_BASE_URL
+); // Add this line to debug
+
 app.use("/api/internships", internshipRoutes);
 app.use("/api/movies", movieRoutes);
 app.use("/api/filters", filterRoutes);
