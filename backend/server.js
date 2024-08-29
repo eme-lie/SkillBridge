@@ -30,9 +30,12 @@ app.use((req, res, next) => {
   next();
 });
 
+const allowedOrigin = process.env.REACT_APP_API_BASE_URL;
+console.log("allowedOrigin:", allowedOrigin);
+
 app.use(
   cors({
-    origin: process.env.REACT_APP_API_BASE_URL, // Use the environment variable
+    origin: allowedOrigin, // Use the environment variable
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     allowedHeaders:
       "Origin, X-Requested-With, Content-Type, Accept, Authorization",
