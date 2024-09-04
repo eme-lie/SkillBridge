@@ -212,7 +212,7 @@ const Discussion = () => {
                     <div className="votes-save-div flex flex-col gap-y-2 items-center">
                       <CircleChevronUp
                         size={28}
-                        className="-mt-1"
+                        className="-mt-1 cursor-pointer"
                         onClick={upVoteDiscussion}
                         color={upvoted ? "#57A2FF" : "#191A23"}
                       />
@@ -220,6 +220,7 @@ const Discussion = () => {
                     </div>
                     <Bookmark
                       size={28}
+                      className="cursor-pointer"
                       onClick={saveDiscussion}
                       color={savedDiscussion ? "#57A2FF" : "#191A23"}
                     />

@@ -73,8 +73,8 @@ const Login = () => {
               />
             </Link>
             <p className="subtitle text-center text-b1 text-text_dark">
-              Welcome back to the largest platform for finding internships in
-              the UK
+              Welcome back to the Biggest Forum for Collaborative Learning and
+              Soft Skills Development
             </p>
           </div>
         </div>

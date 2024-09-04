@@ -77,7 +77,8 @@ const Signup = () => {
               />
             </Link>
             <p className="subtitle text-center text-b1 text-text_dark">
-              Welcome to the largest platform for finding internships in the UK
+              Welcome to the Biggest Forum for Collaborative Learning and Soft
+              Skills Development
             </p>
           </div>
         </div>
