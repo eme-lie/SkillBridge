@@ -4,7 +4,7 @@ import {
   saveDiscussion,
   getSavedDiscussions,
   getUserDiscussions,
-  checkSavedDiscussions,
+  isDiscussionSaved,
 } from "../controllers/userController.js";
 
 import express from "express";
@@ -26,6 +26,6 @@ router.get("/saved_discussions", getSavedDiscussions);
 router.get("/created_discussions", getUserDiscussions);
 
 //check saved discussions
-router.get("/check_saved_discussions/:id", checkSavedDiscussions);
+router.get("/isDiscussionSaved/:id", isDiscussionSaved);
 
 export default router;

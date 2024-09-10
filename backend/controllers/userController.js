@@ -48,6 +48,7 @@ export const userSignUp = asyncHandler(async (req, res) => {
   }
 });
 
+//save discussion
 export const saveDiscussion = asyncHandler(async (req, res) => {
   const discussionId = req.params.id;
   const { userId } = req.body;
@@ -64,9 +65,10 @@ export const saveDiscussion = asyncHandler(async (req, res) => {
   }
 
   // Check if the user has already saved the discussion
-  const hasSaved = user.savedDiscussions.includes(discussionId);
+  const userHasSavedDiscussionApi =
+    user.savedDiscussions.includes(discussionId);
 
-  if (hasSaved) {
+  if (userHasSavedDiscussionApi) {
     // Remove discussion ID from the savedDiscussions array (unsave)
     user.savedDiscussions.pull(discussionId);
   } else {
@@ -76,7 +78,9 @@ export const saveDiscussion = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  res.status(200).json(discussion);
+  res
+    .status(200)
+    .json({ userHasSavedDiscussionApi: !userHasSavedDiscussionApi });
 });
 
 export const getSavedDiscussions = asyncHandler(async (req, res) => {
@@ -116,7 +120,8 @@ export const getUserDiscussions = asyncHandler(async (req, res) => {
   res.status(200).json(discussions);
 });
 
-export const checkSavedDiscussions = async (req, res) => {
+// Check if a discussion is saved by a user
+export const isDiscussionSaved = async (req, res) => {
   const discussionId = req.params.id;
   const { userId } = req.query;
 
@@ -132,10 +137,10 @@ export const checkSavedDiscussions = async (req, res) => {
     return res.status(404).json({ error: "User not found" });
   }
   //const discussion = await User.findById(userId);
-  const userHasSavedDiscussion = user.savedDiscussions.some(
+  const userHasSavedDiscussionApi = user.savedDiscussions.some(
     (savedDiscussionId) => savedDiscussionId.equals(discussionId)
   );
-  res.status(200).json({ userHasSavedDiscussion });
+  res.status(200).json({ userHasSavedDiscussionApi });
 };
 
 export const checkUpvote = async (req, res) => {

@@ -192,7 +192,9 @@ export const toggleUpvote = async (req, res) => {
   res.status(200).json(discussion);
 };
 
-export const saveDiscussion = asyncHandler(async (req, res) => {
+//
+{
+  /*export const saveDiscussion = asyncHandler(async (req, res) => {
   const discussionId = req.params.id;
   const { userId } = req.body;
   console.log({ userId });
@@ -220,8 +222,9 @@ export const saveDiscussion = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  res.status(200).json(discussion);
-});
+  res.status(200).json({ hasSaved: !hasSaved });
+});*/
+}
 
 export const getCreatedDiscussions = asyncHandler(async (req, res) => {
   const discussionId = req.params.id;

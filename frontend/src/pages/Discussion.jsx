@@ -67,8 +67,9 @@ const Discussion = () => {
   };
 
   const [discussion, setDiscussion] = useState(null);
-  const [upvoted, setUpvoted] = useState(false);
-  const [savedDiscussion, setSavedDiscussion] = useState(false);
+  const [UserHasUpvoted, setUserHasUpvoted] = useState(false);
+  const [voteCount, setVoteCount] = useState(0);
+  const [hasSavedDiscussion, setHasSavedDiscussion] = useState(false);
 
   //fetching discussion data on page load
   useEffect(() => {
@@ -78,6 +79,7 @@ const Discussion = () => {
         const { data } = await axiosInstance.get(
           `/api/discussions/${discussionId}`
         );
+        setVoteCount(data.upvotes.length);
 
         console.log("Fetched data:", data);
         setDiscussion(data);
@@ -99,20 +101,20 @@ const Discussion = () => {
         console.log("User ID:", userId);
 
         const { data } = await axiosInstance.get(
-          `/api/user/check_saved_discussions/${discussionId}`,
+          `/api/user/isDiscussionSaved/${discussionId}`,
           {
             params: { userId },
           }
         );
 
         console.log("Checked saved status:", data);
-        setSavedDiscussion(data.userHasSavedDiscussion);
+        setHasSavedDiscussion(data.userHasSavedDiscussionApi);
       } catch (error) {
         console.error("Error checking saved status:", error);
       }
     };
     checkSavedDiscussion();
-  }, []);
+  }, [discussionId]);
 
   //checking if discussion is upvoted by user on page load
   {
@@ -133,7 +135,7 @@ const Discussion = () => {
               }
             );
             console.log("Checked upvote status:", data);
-            setUpvoted(data.userHasUpvoted);
+            setUserHasUpvoted(data.userHasUpvoted);
           } catch (error) {
             console.error("Error checking upvote status:", error);
           }
@@ -163,7 +165,7 @@ const Discussion = () => {
   };
 
   //for saving discussion: click on bookmark icon
-  const saveDiscussion = async () => {
+  const saveDiscussionApi = async () => {
     try {
       console.log("Saving discussion ID:", discussionId);
       console.log("User ID:", userId);
@@ -175,7 +177,7 @@ const Discussion = () => {
         }
       );
       console.log("Saved discussion:", data);
-      setDiscussion(data);
+      setHasSavedDiscussion(data.userHasSavedDiscussionApi);
     } catch (error) {
       console.error("Error saving discussion:", error);
     }
@@ -230,14 +232,14 @@ const Discussion = () => {
                         size={28}
                         className="-mt-1"
                         onClick={upVoteDiscussion}
-                        color={upvoted ? "#57A2FF" : "#191A23"}
+                        color={UserHasUpvoted ? "#57A2FF" : "#191A23"}
                       />
                       <p className="text-b3">{discussion.upvotes.length}</p>
                     </div>
                     <Bookmark
                       size={28}
-                      onClick={saveDiscussion}
-                      color={savedDiscussion ? "#57A2FF" : "#191A23"}
+                      onClick={saveDiscussionApi}
+                      color={hasSavedDiscussion ? "#57A2FF" : "#191A23"}
                     />
                   </div>
 
