@@ -22,7 +22,7 @@ router.route("/").post(createDiscussion);
 //router.use(requireAuth);
 
 // GET /api/discussions/:id
-router.route("/:id").get(getDiscussionById);
+router.route("/:discussionId").get(getDiscussionById);
 
 // PUT /api/discussions/:id/upvote
 //router.route("/:id/upvote").put(toggleUpvote);
@@ -46,12 +46,12 @@ router.route("/:id").get(getDiscussionById);
 }
 
 // POST /api/discussions/:id/reply
-router.route("/:id/reply").put(replyDiscussion);
+router.route("/:discussionId/reply").put(replyDiscussion);
 
-router.route("/upvote/:id").put(toggleUpvote);
+router.route("/upvote/:discussionId").put(toggleUpvote);
 
-router.route("/edit_discussion/:id").put(editDiscussion);
+router.route("/edit_discussion/:discussionId").put(editDiscussion);
 
-router.route("/check_upvote/:id").get(checkUpvote);
+router.route("/check_upvote/:discussionId").get(checkUpvote);
 
 export default router;
