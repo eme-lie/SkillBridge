@@ -249,7 +249,7 @@ export const getCreatedDiscussions = asyncHandler(async (req, res) => {
     user.createdDiscussions.pull(discussionId);
   } else {
     // Add discussion ID to the CreatedDiscussions array
-    user.CreatedDiscussions.push(discussionId);
+    user.createdDiscussions.push(discussionId);
   }
 
   await user.save();

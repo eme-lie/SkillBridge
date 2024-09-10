@@ -23,7 +23,7 @@ const Discussion = () => {
     state: { user },
   } = useAuthContext();
 
-  const { discussionId } = useParams();
+  const { id: discussionId } = useParams();
   const userId = user?.id;
   const userDisplayName = user?.userDisplayName;
   const {
