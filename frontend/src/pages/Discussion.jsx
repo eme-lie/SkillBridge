@@ -100,15 +100,17 @@ const Discussion = () => {
         console.log("Checking saved status for discussion ID:", discussionId);
         console.log("User ID:", userId);
 
-        const { data } = await axiosInstance.get(
-          `/api/user/isDiscussionSaved/${discussionId}`,
-          {
-            params: { userId },
-          }
-        );
+        if (!userId) {
+          const { data } = await axiosInstance.get(
+            `/api/user/isDiscussionSaved/${discussionId}`,
+            {
+              params: { userId },
+            }
+          );
 
-        console.log("Checked saved status:", data);
-        setHasSavedDiscussion(data.userHasSavedDiscussionApi);
+          console.log("Checked saved status:", data);
+          setHasSavedDiscussion(data.userHasSavedDiscussionApi);
+        }
       } catch (error) {
         console.error("Error checking saved status:", error);
       }

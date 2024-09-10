@@ -122,24 +122,36 @@ export const getUserDiscussions = asyncHandler(async (req, res) => {
 
 // Check if a discussion is saved by a user
 export const isDiscussionSaved = async (req, res) => {
-  const discussionId = req.params.id;
+  const discussionId = req.params.discussionId;
   const { userId } = req.query;
 
-  console.log(`User ID for checkSaved: ${userId}`);
-  console.log({ discussionId });
+  if (!userId) {
+    return res
+      .status(400)
+      .json({ error: "userId is required in query parameters" });
+  }
 
-  // Convert userId to ObjectId for consistent comparison
-  const userObjectId = mongoose.Types.ObjectId.createFromTime(userId);
+  console.log(`User ID for checkSaved: ${userId}`);
+  console.log(`Discussion ID for checkSaved: ${discussionId}`);
+
+  // Convert userId to ObjectId
+  let userObjectId;
+  try {
+    userObjectId = mongoose.Types.ObjectId(userId);
+  } catch (error) {
+    return res.status(400).json({ error: "Invalid userId format" });
+  }
 
   const user = await User.findById(userObjectId);
 
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
-  //const discussion = await User.findById(userId);
+
   const userHasSavedDiscussionApi = user.savedDiscussions.some(
     (savedDiscussionId) => savedDiscussionId.equals(discussionId)
   );
+
   res.status(200).json({ userHasSavedDiscussionApi });
 };
 
