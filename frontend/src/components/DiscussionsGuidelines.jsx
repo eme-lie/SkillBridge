@@ -23,8 +23,8 @@ const DiscussionsGuidelines = () => {
           <AccordionContent>
             <p className="pl-4 pr-4 pt-1 text-sb1">
               Use Discussions to engage in deeper dialogue, have opinion-based
-              conversations, and exchange perspectives about a technical
-              concept. See full Discussions guidelines.
+              conversations, and exchange perspectives about soft skill
+              development. See full Discussions guidelines.
             </p>
           </AccordionContent>
         </AccordionItem>

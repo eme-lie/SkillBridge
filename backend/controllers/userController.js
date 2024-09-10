@@ -134,6 +134,11 @@ export const isDiscussionSaved = async (req, res) => {
   console.log(`User ID for checkSaved: ${userId}`);
   console.log(`Discussion ID for checkSaved: ${discussionId}`);
 
+  // Validate whether the userId is a valid ObjectId format
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ error: "Invalid userId formattt" });
+  }
+
   // Convert userId to ObjectId
   let userObjectId;
   try {

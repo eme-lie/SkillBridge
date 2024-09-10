@@ -258,12 +258,12 @@ export const getCreatedDiscussions = asyncHandler(async (req, res) => {
 });
 
 export const replyDiscussion = asyncHandler(async (req, res) => {
-  const id = req.params.id;
-  console.log(id);
+  const discussionId = req.params.discussionId;
+  console.log(discussionId);
   const { userId, data, userDisplayName } = req.body;
   console.log({ userId, data, userDisplayName });
 
-  const discussion = await Discussion.findById(id);
+  const discussion = await Discussion.findById(discussionId);
 
   if (!discussion) {
     return res.status(404).json({ error: "Discussion not found" });
@@ -283,10 +283,10 @@ export const replyDiscussion = asyncHandler(async (req, res) => {
 });
 
 export const editDiscussion = asyncHandler(async (req, res) => {
-  const id = req.params.id;
+  const discussionId = req.params.discussionId;
   const { title, description, tag } = req.body;
 
-  const discussion = await Discussion.findById(id);
+  const discussion = await Discussion.findById(discussionId);
 
   if (!discussion) {
     return res.status(404).json({ error: "Discussion not found" });

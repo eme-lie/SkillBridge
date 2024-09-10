@@ -100,7 +100,7 @@ const Discussion = () => {
         console.log("Checking saved status for discussion ID:", discussionId);
         console.log("User ID:", userId);
 
-        if (!userId) {
+        if (userId) {
           const { data } = await axiosInstance.get(
             `/api/user/isDiscussionSaved/${discussionId}`,
             {
@@ -115,8 +115,10 @@ const Discussion = () => {
         console.error("Error checking saved status:", error);
       }
     };
-    checkSavedDiscussion();
-  }, [discussionId]);
+    if (discussionId && userId) {
+      checkSavedDiscussion();
+    }
+  }, [discussionId, userId]);
 
   //checking if discussion is upvoted by user on page load
   {
@@ -232,7 +234,7 @@ const Discussion = () => {
                     <div className="votes-save-div flex flex-col gap-y-2 items-center">
                       <CircleChevronUp
                         size={28}
-                        className="-mt-1"
+                        className="-mt-1 cursor-pointer"
                         onClick={upVoteDiscussion}
                         color={UserHasUpvoted ? "#57A2FF" : "#191A23"}
                       />
@@ -242,6 +244,7 @@ const Discussion = () => {
                       size={28}
                       onClick={saveDiscussionApi}
                       color={hasSavedDiscussion ? "#57A2FF" : "#191A23"}
+                      className="cursor-pointer"
                     />
                   </div>
 

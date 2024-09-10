@@ -17,11 +17,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const CreateDiscussion = () => {
-  const { id } = useParams();
+  const { id: discussionId } = useParams();
   useEffect(() => {
     const fetchDiscussion = async () => {
-      if (id) {
-        const { data } = await axiosInstance.get(`/api/discussions/${id}`);
+      if (discussionId) {
+        const { data } = await axiosInstance.get(
+          `/api/discussions/${discussionId}`
+        );
         console.log(data);
         // Set form values to the discussion data
         form.setValue("title", data.title);
@@ -98,9 +100,9 @@ const CreateDiscussion = () => {
     };
 
     try {
-      if (id) {
+      if (discussionId) {
         const response = await axiosInstance.put(
-          `/api/discussions/edit_discussion/${id}`,
+          `/api/discussions/edit_discussion/${discussionId}`,
           requestData,
           {
             headers: {
@@ -248,7 +250,7 @@ const CreateDiscussion = () => {
                       : "bg-primary_light w-fit text-text_light pt-3 pr-4 pb-3 pl-4 md:pt-4 md:pr-6 md:pb-4 md:pl-6 rounded font-medium text-sm md:text-lg"
                   }`}
                 >
-                  {id ? "Edit Discussion" : "Create Discussion"}
+                  {discussionId ? "Edit Discussion" : "Create Discussion"}
                 </Button>
 
                 {/* Render general error message */}
