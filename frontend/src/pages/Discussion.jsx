@@ -23,7 +23,7 @@ const Discussion = () => {
     state: { user },
   } = useAuthContext();
 
-  const { id } = useParams();
+  const { discussionId } = useParams();
   const userId = user?.id;
   const userDisplayName = user?.userDisplayName;
   const {
@@ -36,7 +36,7 @@ const Discussion = () => {
   const onSubmit = async (data) => {
     try {
       console.log("Submitting reply:", data);
-      await axiosInstance.put(`/api/discussions/${id}/reply`, {
+      await axiosInstance.put(`/api/discussions/${discussionId}/reply`, {
         data,
         userId,
         userDisplayName,
@@ -70,47 +70,14 @@ const Discussion = () => {
   const [upvoted, setUpvoted] = useState(false);
   const [savedDiscussion, setSavedDiscussion] = useState(false);
 
-  const saveDiscussion = async () => {
-    try {
-      console.log("Saving discussion ID:", id);
-      console.log("User ID:", userId);
-
-      const { data } = await axiosInstance.put(
-        `/api/user/save_discussion/${id}`,
-        {
-          userId,
-        }
-      );
-      console.log("Saved discussion:", data);
-      setDiscussion(data);
-    } catch (error) {
-      console.error("Error saving discussion:", error);
-    }
-  };
-
-  const upVoteDiscussion = async () => {
-    try {
-      console.log("Upvoting discussion ID:", id);
-      console.log("User ID:", userId);
-
-      const { data } = await axiosInstance.put(
-        `/api/discussions/upvote/${id}`,
-        {
-          userId,
-        }
-      );
-
-      console.log("Upvoted discussion:", data);
-    } catch (error) {
-      console.error("Error upvoting discussion:", error);
-    }
-  };
-
+  //fetching discussion data on page load
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("Fetching data for discussion ID:", id);
-        const { data } = await axiosInstance.get(`/api/discussions/${id}`);
+        console.log("Fetching data for discussion ID:", discussionId);
+        const { data } = await axiosInstance.get(
+          `/api/discussions/${discussionId}`
+        );
 
         console.log("Fetched data:", data);
         setDiscussion(data);
@@ -119,19 +86,20 @@ const Discussion = () => {
       }
     };
 
-    if (id) {
+    if (discussionId) {
       fetchData();
     }
-  }, [id]);
+  }, [discussionId]);
 
+  //checking if discussion is saved by user on page load
   useEffect(() => {
     const checkSavedDiscussion = async () => {
       try {
-        console.log("Checking saved status for discussion ID:", id);
+        console.log("Checking saved status for discussion ID:", discussionId);
         console.log("User ID:", userId);
 
         const { data } = await axiosInstance.get(
-          `/api/user/check_saved_discussions/${id}`,
+          `/api/user/check_saved_discussions/${discussionId}`,
           {
             params: { userId },
           }
@@ -146,16 +114,20 @@ const Discussion = () => {
     checkSavedDiscussion();
   }, []);
 
+  //checking if discussion is upvoted by user on page load
   {
     useEffect(() => {
       if (discussion) {
         const checkUpvote = async () => {
           try {
-            console.log("Checking upvote status for discussion ID:", id);
+            console.log(
+              "Checking upvote status for discussion ID:",
+              discussionId
+            );
             console.log("User ID:", userId);
 
             const { data } = await axiosInstance.get(
-              `/api/discussions/check_upvote/${id}`,
+              `/api/discussions/check_upvote/${discussionId}`,
               {
                 userId,
               }
@@ -168,8 +140,46 @@ const Discussion = () => {
         };
         checkUpvote();
       }
-    }, [discussion, id, userId]);
+    }, [discussion, discussionId]);
   }
+
+  //for upvoting discussion: click on upvote icon
+  const upVoteDiscussion = async () => {
+    try {
+      console.log("Upvoting discussion ID:", discussionId);
+      console.log("User ID:", userId);
+
+      const { data } = await axiosInstance.put(
+        `/api/discussions/upvote/${discussionId}`,
+        {
+          userId,
+        }
+      );
+
+      console.log("Upvoted discussion:", data);
+    } catch (error) {
+      console.error("Error upvoting discussion:", error);
+    }
+  };
+
+  //for saving discussion: click on bookmark icon
+  const saveDiscussion = async () => {
+    try {
+      console.log("Saving discussion ID:", discussionId);
+      console.log("User ID:", userId);
+
+      const { data } = await axiosInstance.put(
+        `/api/user/save_discussion/${discussionId}`,
+        {
+          userId,
+        }
+      );
+      console.log("Saved discussion:", data);
+      setDiscussion(data);
+    } catch (error) {
+      console.error("Error saving discussion:", error);
+    }
+  };
 
   if (!discussion) {
     return <div>Loading...</div>; // Or any loading indicator

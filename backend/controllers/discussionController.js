@@ -156,11 +156,13 @@ export const toggleUpvote = async (req, res) => {
     const hasUpvoted = discussion.upvotes.some((upvoteId) =>
       upvoteId.equals(userObjectId)
     );
-    const hasSaved = user.upvotedDiscussions.some((discussionId) =>
+    {
+      /*const hasSaved = user.upvotedDiscussions.some((discussionId) =>
       discussionId.equals(discussion._id)
-    );
+    );*/
+    }
 
-    if (hasUpvoted && hasSaved) {
+    if (hasUpvoted) {
       try {
         // Remove user ID from the upvotes array (unupvote)
         discussion.upvotes.pull(userObjectId);
@@ -189,6 +191,7 @@ export const toggleUpvote = async (req, res) => {
 
   res.status(200).json(discussion);
 };
+
 export const saveDiscussion = asyncHandler(async (req, res) => {
   const discussionId = req.params.id;
   const { userId } = req.body;

@@ -82,7 +82,7 @@ const CreatedDiscussions = () => {
                         <AvatarImage src="https://github.com/shadcn.png" />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
-                      <p className="text-sb1">Emelie Obiora</p>
+                      <p className="text-sb1">{discussion.userDisplayName}</p>
                     </div>
 
                     <div className="other-details-right-2 flex gap-x-1">
