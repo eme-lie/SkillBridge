@@ -70,7 +70,7 @@ export const getDiscussions = asyncHandler(async (req, res) => {
 // @access Public
 
 export const getDiscussionById = asyncHandler(async (req, res) => {
-  const discussion = await Discussion.findById(req.params.id);
+  const discussion = await Discussion.findById(req.params.discussionId);
   if (discussion) {
     return res.json(discussion);
   } else {
@@ -117,7 +117,7 @@ export const createDiscussion = asyncHandler(async (req, res) => {
 });
 
 export const checkUpvote = async (req, res) => {
-  const discussionId = req.params.id;
+  const discussionId = req.params.discussionId;
   const { userId } = req.body;
 
   console.log({ userId });
@@ -133,7 +133,7 @@ export const checkUpvote = async (req, res) => {
 };
 
 export const toggleUpvote = async (req, res) => {
-  const discussionId = req.params.id;
+  const discussionId = req.params.discussionId;
   const { userId } = req.body;
 
   console.log({ userId });
