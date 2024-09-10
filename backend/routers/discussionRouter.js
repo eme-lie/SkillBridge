@@ -6,7 +6,7 @@ import {
   getDiscussionById,
   createDiscussion,
   toggleUpvote,
-  saveDiscussion,
+  //saveDiscussion,
   replyDiscussion,
   editDiscussion,
   checkUpvote,
@@ -29,7 +29,7 @@ router.route("/:id").get(getDiscussionById);
 
 //router.put("/api/discussions/:id/upvote", requireAuth, toggleUpvote);
 
-router.route("/save_discussion/:id").put(saveDiscussion);
+//router.route("/save_discussion/:id").put(saveDiscussion);
 
 //router.route("/api/discussions/save_discussion/:id").put(saveDiscussion);
 
